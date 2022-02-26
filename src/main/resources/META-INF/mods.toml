@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[38,)"
+license="ARR"
+
+[[mods]]
+modId="jadeaddons"
+version="${file.jarVersion}"
+displayName="Jade Addons"
+authors="Snownee"
+displayURL="https://minecraft.curseforge.com/projects/jade-addons"
+description="Jade additional mod supports"
+
+[[dependencies.jade-addons]]
+    modId="jade"
+    mandatory=true
+    versionRange="[4.4, )"
+    ordering="NONE"
+    side="BOTH"
+
+[modproperties.jade]
+    catalogueItemIcon="minecraft:spyglass" #Support for Catalogue mod

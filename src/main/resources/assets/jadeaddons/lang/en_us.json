@@ -1,0 +1,12 @@
+{
+"config.waila.plugin_secretroomsmod.jadeaddons": "Enabled",
+"config.waila.plugin_create.blaze_burner": "Blaze Burner",
+"config.waila.plugin_create.crafting_blueprint": "Crafting Blueprint",
+"config.waila.plugin_tconstruct.casting_table": "Casting Table",
+"config.waila.plugin_tconstruct.drain": "Drain & Duct",
+
+"entity.tconstruct.glow_ball": "Glowball",
+"entity.tconstruct.efln_ball": "EFLN",
+"entity.tconstruct.flint_shuriken": "Flint Shuriken",
+"entity.tconstruct.quartz_shuriken": "Quartz Shuriken"
+}
