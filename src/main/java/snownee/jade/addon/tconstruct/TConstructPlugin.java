@@ -1,4 +1,4 @@
-package snownee.jade.addon.tconstruct;
+/*package snownee.jade.addon.tconstruct;
 
 import mcp.mobius.waila.api.IWailaClientRegistration;
 import mcp.mobius.waila.api.IWailaCommonRegistration;
@@ -32,3 +32,4 @@ public class TConstructPlugin implements IWailaPlugin {
 	}
 
 }
+*/

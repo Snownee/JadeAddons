@@ -31,7 +31,7 @@ if (System.getenv().BUILD_NUMBER != null) {
 }
 
 minecraft {
-    mappings channel: 'official', version: '1.18.1'
+    mappings channel: 'official', version: '1.18.2'
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -93,17 +93,17 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
-    implementation fg.deobf("curse.maven:jei-238222:3599262")
-    //implementation fg.deobf("curse.maven:jade-324717:3658872")
-    implementation fg.deobf("libs:Jade-1.18.1:4.4.0")
+    implementation fg.deobf("curse.maven:jei-238222:3758750")
+    implementation fg.deobf("curse.maven:jade-324717:3761542")
+    //implementation fg.deobf("libs:Jade-1.18.1:4.4.0")
     
-    implementation fg.deobf("curse.maven:secret-rooms-59652:3613983")
+    implementation fg.deobf("curse.maven:secret-rooms-59652:3764897")
     
-    implementation fg.deobf("curse.maven:mantle-74924:3634761")
-    implementation fg.deobf("curse.maven:tinkers-construct-74072:3648309")
+    //implementation fg.deobf("curse.maven:mantle-74924:3634761")
+    //implementation fg.deobf("curse.maven:tinkers-construct-74072:3648309")
     
-    implementation fg.deobf("curse.maven:create-328085:3623348")
-    implementation fg.deobf("curse.maven:flywheel-486392:3623314")
+    implementation fg.deobf("curse.maven:create-328085:3737418")
+    implementation fg.deobf("curse.maven:flywheel-486392:3737402")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
