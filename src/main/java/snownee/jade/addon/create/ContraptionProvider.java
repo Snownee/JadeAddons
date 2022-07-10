@@ -33,7 +33,7 @@ public enum ContraptionProvider implements IEntityComponentProvider, IServerData
 	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, Entity entity, boolean details) {
 		Contraption contraption = ((AbstractContraptionEntity) entity).getContraption();
 		int size = details ? JadeCommonConfig.inventoryDetailedShowAmount : JadeCommonConfig.inventoryNormalShowAmount;
-		InventoryProvider.putInvData(data, contraption.inventory, size, 0);
+		InventoryProvider.putInvData(data, contraption.getSharedInventory(), size, 0);
 	}
 
 }

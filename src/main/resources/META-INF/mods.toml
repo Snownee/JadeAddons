@@ -10,12 +10,12 @@ authors="Snownee"
 displayURL="https://minecraft.curseforge.com/projects/jade-addons"
 description="Jade additional mod supports"
 
-[[dependencies.jade-addons]]
+[[dependencies.jadeaddons]]
     modId="jade"
     mandatory=true
-    versionRange="[5.1, )"
+    versionRange="[5.2.3, )"
     ordering="NONE"
     side="BOTH"
 
-[modproperties.jade]
+[modproperties.jadeaddons]
     catalogueItemIcon="minecraft:spyglass" #Support for Catalogue mod

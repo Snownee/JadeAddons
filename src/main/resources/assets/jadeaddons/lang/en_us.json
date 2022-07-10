@@ -4,6 +4,18 @@
 "config.waila.plugin_create.crafting_blueprint": "Crafting Blueprint",
 "config.waila.plugin_tconstruct.casting_table": "Casting Table",
 "config.waila.plugin_tconstruct.drain": "Drain & Duct",
+"config.waila.plugin_mcjtylib.jadeaddons": "Enabled",
+"config.waila.plugin_deepresonance.tank": "Tank",
+
+"jadeaddons.mcjtylib.infused": "Infused: %s%%",
+"jadeaddons.mcjtylib.ownedBy": "Owned by: %s",
+"jadeaddons.mcjtylib.ownedBy.withChannel": "Owned by: %s (channel %s)",
+"jadeaddons.mcjtylib.ownedBy.warning": "Warning! Ownership not correctly set! Please place block again!",
+
+"jadeaddons.deepresonance.quality": "Quality: %s%%",
+"jadeaddons.deepresonance.efficiency": "Efficiency: %s%%",
+"jadeaddons.deepresonance.purity": "Purity: %s%%",
+"jadeaddons.deepresonance.strength": "Strength: %s%%",
 
 "entity.tconstruct.glow_ball": "Glowball",
 "entity.tconstruct.efln_ball": "EFLN",

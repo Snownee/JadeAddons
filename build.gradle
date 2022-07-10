@@ -94,16 +94,22 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
     implementation fg.deobf("curse.maven:jei-238222:3758750")
-    implementation fg.deobf("curse.maven:jade-324717:3761542")
+    implementation fg.deobf("curse.maven:jade-324717:3865918")
     //implementation fg.deobf("libs:Jade-1.18.1:4.4.0")
     
     implementation fg.deobf("curse.maven:secret-rooms-59652:3764897")
     
-    //implementation fg.deobf("curse.maven:mantle-74924:3634761")
-    //implementation fg.deobf("curse.maven:tinkers-construct-74072:3648309")
+    implementation fg.deobf("curse.maven:mantle-74924:3829975")
+    implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
     
-    implementation fg.deobf("curse.maven:create-328085:3737418")
-    implementation fg.deobf("curse.maven:flywheel-486392:3737402")
+    implementation fg.deobf("curse.maven:create-328085:3864525")
+    implementation fg.deobf("curse.maven:flywheel-486392:3864518")
+    
+    implementation fg.deobf("curse.maven:deep-resonance-233398:3853562")
+    implementation fg.deobf("curse.maven:rftools-base-326041:3825686")
+    implementation fg.deobf("curse.maven:mcjtylib-233105:3825684")
+    
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
