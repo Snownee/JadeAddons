@@ -17,13 +17,13 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.JadeCommonConfig;
 import snownee.jade.addon.forge.InventoryProvider;
 
-public enum ContraptionProvider implements IEntityComponentProvider, IServerDataProvider<Entity> {
+public enum ContraptionInventoryProvider implements IEntityComponentProvider, IServerDataProvider<Entity> {
 	INSTANCE;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
-		if (!config.get(CreatePlugin.CONTRAPTION)) {
+		if (!config.get(CreatePlugin.CONTRAPTION_INVENTORY)) {
 			return;
 		}
 		InventoryProvider.append(tooltip, accessor);

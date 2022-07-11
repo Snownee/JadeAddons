@@ -5,42 +5,52 @@ import com.simibubi.create.content.contraptions.components.structureMovement.Con
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
 import com.simibubi.create.content.curiosities.tools.BlueprintEntity;
+import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline;
+import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline.BezierPointSelection;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 import com.simibubi.create.foundation.utility.RaycastHelper.PredicateTraceResult;
 
+import mcp.mobius.waila.api.Accessor;
+import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IWailaClientRegistration;
 import mcp.mobius.waila.api.IWailaCommonRegistration;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
 import mcp.mobius.waila.api.WailaPlugin;
+import mcp.mobius.waila.api.event.WailaRayTraceEvent;
 import mcp.mobius.waila.overlay.RayTracing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 
 @WailaPlugin(CreatePlugin.ID)
 public class CreatePlugin implements IWailaPlugin {
 	public static final String ID = "create";
 	public static final ResourceLocation CRAFTING_BLUEPRINT = new ResourceLocation(ID, "crafting_blueprint");
 	public static final ResourceLocation BLAZE_BURNER = new ResourceLocation(ID, "blaze_burner");
-	public static final ResourceLocation CONTRAPTION = new ResourceLocation(ID, "contraption");
+	public static final ResourceLocation CONTRAPTION_INVENTORY = new ResourceLocation(ID, "contraption_inv");
+	public static final ResourceLocation CONTRAPTION_EXACT_BLOCK = new ResourceLocation(ID, "exact_block");
 	static IWailaClientRegistration client;
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
 		registration.addConfig(CRAFTING_BLUEPRINT, true);
 		registration.addConfig(BLAZE_BURNER, true);
-		registration.addConfig(CONTRAPTION, true);
+		registration.addConfig(CONTRAPTION_INVENTORY, true);
+		registration.addConfig(CONTRAPTION_EXACT_BLOCK, true);
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
-		registration.registerEntityDataProvider(ContraptionProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerEntityDataProvider(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
 	}
 
 	// See ContraptionHandlerClient
@@ -51,7 +61,9 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerComponentProvider(CraftingBlueprintProvider.INSTANCE, TooltipPosition.BODY, BlueprintEntity.class);
 		registration.registerIconProvider(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
 		registration.registerComponentProvider(BlazeBurnerProvider.INSTANCE, TooltipPosition.BODY, BlazeBurnerBlock.class);
-		registration.registerComponentProvider(ContraptionProvider.INSTANCE, TooltipPosition.BODY, AbstractContraptionEntity.class);
+		registration.registerComponentProvider(ContraptionInventoryProvider.INSTANCE, TooltipPosition.BODY, AbstractContraptionEntity.class);
+		registration.registerIconProvider(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerComponentProvider(ContraptionExactBlockProvider.INSTANCE, TooltipPosition.HEAD, AbstractContraptionEntity.class);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
 			if (!(e instanceof AbstractContraptionEntity)) {
@@ -76,10 +88,26 @@ public class CreatePlugin implements IWailaPlugin {
 				if (raytraceShape.isEmpty())
 					return false;
 				BlockHitResult rayTrace = raytraceShape.clip(localOrigin, localTarget, p);
+				if (rayTrace != null && rayTrace.getType() != Type.MISS) {
+					ContraptionExactBlockProvider.INSTANCE.setHit(rayTrace, state);
+				}
 				return rayTrace != null;
 			});
 			return predicateResult != null && !predicateResult.missed();
 		});
+
+		MinecraftForge.EVENT_BUS.addListener(this::override);
+	}
+
+	public void override(WailaRayTraceEvent event) {
+		BezierPointSelection result = TrackBlockOutline.result;
+		if (result == null) {
+			return;
+		}
+		Accessor<?> accessor = event.getAccessor();
+		BlockHitResult hitResult = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
+		BlockAccessor newAccessor = client.createBlockAccessor(result.te().getBlockState(), result.te(), accessor.getLevel(), accessor.getPlayer(), accessor.getServerData(), hitResult, accessor.isServerConnected());
+		event.setAccessor(newAccessor);
 	}
 
 }
