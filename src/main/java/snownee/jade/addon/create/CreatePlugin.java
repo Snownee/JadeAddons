@@ -4,6 +4,7 @@ import com.simibubi.create.content.contraptions.components.structureMovement.Abs
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
+import com.simibubi.create.content.curiosities.deco.PlacardBlock;
 import com.simibubi.create.content.curiosities.tools.BlueprintEntity;
 import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline;
 import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline.BezierPointSelection;
@@ -12,6 +13,7 @@ import com.simibubi.create.foundation.utility.RaycastHelper.PredicateTraceResult
 
 import mcp.mobius.waila.api.Accessor;
 import mcp.mobius.waila.api.BlockAccessor;
+import mcp.mobius.waila.api.EntityAccessor;
 import mcp.mobius.waila.api.IWailaClientRegistration;
 import mcp.mobius.waila.api.IWailaCommonRegistration;
 import mcp.mobius.waila.api.IWailaPlugin;
@@ -38,6 +40,7 @@ import net.minecraftforge.common.MinecraftForge;
 public class CreatePlugin implements IWailaPlugin {
 	public static final String ID = "create";
 	public static final ResourceLocation CRAFTING_BLUEPRINT = new ResourceLocation(ID, "crafting_blueprint");
+	public static final ResourceLocation PLACARD = new ResourceLocation(ID, "placard");
 	public static final ResourceLocation BLAZE_BURNER = new ResourceLocation(ID, "blaze_burner");
 	public static final ResourceLocation CONTRAPTION_INVENTORY = new ResourceLocation(ID, "contraption_inv");
 	public static final ResourceLocation CONTRAPTION_EXACT_BLOCK = new ResourceLocation(ID, "exact_block");
@@ -46,6 +49,7 @@ public class CreatePlugin implements IWailaPlugin {
 	@Override
 	public void register(IWailaCommonRegistration registration) {
 		registration.addConfig(CRAFTING_BLUEPRINT, true);
+		registration.addConfig(PLACARD, true);
 		registration.addConfig(BLAZE_BURNER, true);
 		registration.addConfig(CONTRAPTION_INVENTORY, true);
 		registration.addConfig(CONTRAPTION_EXACT_BLOCK, true);
@@ -60,6 +64,8 @@ public class CreatePlugin implements IWailaPlugin {
 		client = registration;
 		registration.registerComponentProvider(CraftingBlueprintProvider.INSTANCE, TooltipPosition.BODY, BlueprintEntity.class);
 		registration.registerIconProvider(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
+		registration.registerComponentProvider(PlacardProvider.INSTANCE, TooltipPosition.BODY, PlacardBlock.class);
+		registration.registerIconProvider(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerComponentProvider(BlazeBurnerProvider.INSTANCE, TooltipPosition.BODY, BlazeBurnerBlock.class);
 		registration.registerComponentProvider(ContraptionInventoryProvider.INSTANCE, TooltipPosition.BODY, AbstractContraptionEntity.class);
 		registration.registerIconProvider(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
@@ -105,6 +111,9 @@ public class CreatePlugin implements IWailaPlugin {
 			return;
 		}
 		Accessor<?> accessor = event.getAccessor();
+		if (accessor instanceof EntityAccessor) {
+			return;
+		}
 		BlockHitResult hitResult = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
 		BlockAccessor newAccessor = client.createBlockAccessor(result.te().getBlockState(), result.te(), accessor.getLevel(), accessor.getPlayer(), accessor.getServerData(), hitResult, accessor.isServerConnected());
 		event.setAccessor(newAccessor);

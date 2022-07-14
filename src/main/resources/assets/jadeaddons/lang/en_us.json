@@ -2,6 +2,7 @@
 "config.waila.plugin_secretroomsmod.jadeaddons": "Enabled",
 "config.waila.plugin_create.blaze_burner": "Blaze Burner",
 "config.waila.plugin_create.crafting_blueprint": "Crafting Blueprint",
+"config.waila.plugin_create.placard": "Placard",
 "config.waila.plugin_create.contraption_inv": "Contraption Inventory",
 "config.waila.plugin_create.exact_block": "Contraption Exact Block",
 "config.waila.plugin_tconstruct.casting_table": "Casting Table",

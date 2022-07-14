@@ -110,6 +110,10 @@ dependencies {
     implementation fg.deobf("curse.maven:mcjtylib-233105:3825684")
     
     implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
+    
+    implementation fg.deobf("curse.maven:thermal-expansion-69163:3837868")
+    implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
+    implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
