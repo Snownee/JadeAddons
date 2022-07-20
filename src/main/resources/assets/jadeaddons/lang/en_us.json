@@ -10,6 +10,7 @@
 "config.waila.plugin_mcjtylib.jadeaddons": "Enabled",
 "config.waila.plugin_deepresonance.crystal": "Crystal",
 "config.waila.plugin_deepresonance.generator_part": "Generator Part",
+"config.waila.plugin_lootr.info": "Information",
 
 "jadeaddons.mcjtylib.infused": "Infused: %s%%",
 "jadeaddons.mcjtylib.ownedBy": "Owned by: %s",
@@ -21,6 +22,10 @@
 "jadeaddons.deepresonance.id": "Id: %s",
 "jadeaddons.deepresonance.collectors": "Collectors: %s",
 "jadeaddons.deepresonance.generators": "Generators: %s",
+
+"jadeaddons.lootr.decay": "Decay in: %ss",
+"jadeaddons.lootr.refresh": "Refresh in: %ss",
+"jadeaddons.lootr.refreshed": "Refreshed!",
 
 "entity.tconstruct.glow_ball": "Glowball",
 "entity.tconstruct.efln_ball": "EFLN",
