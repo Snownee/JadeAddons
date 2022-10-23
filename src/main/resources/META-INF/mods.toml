@@ -7,7 +7,7 @@ modId="jadeaddons"
 version="${file.jarVersion}"
 displayName="Jade Addons"
 authors="Snownee"
-displayURL="https://minecraft.curseforge.com/projects/jade-addons"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/jade-addons"
 description="Jade additional mod supports"
 
 [[dependencies.jadeaddons]]
