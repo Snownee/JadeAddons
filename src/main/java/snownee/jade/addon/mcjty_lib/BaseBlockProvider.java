@@ -4,43 +4,41 @@ import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.base.GeneralConfig;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.tileentity.GenericTileEntity;
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public enum BaseBlockProvider implements IComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
 	INSTANCE;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!config.get(McjtyLibPlugin.GENERAL)) {
-			return;
-		}
 		CompoundTag data = accessor.getServerData();
 		if (data.contains("Infused")) {
-			tooltip.add(new TranslatableComponent("jadeaddons.mcjtylib.infused", data.getInt("Infused")));
+			tooltip.add(Component.translatable("jadeaddons.mcjtylib.infused", data.getInt("Infused")));
 		}
 		if (data.contains("SecurityChannel")) {
 			int channel = data.getInt("SecurityChannel");
 			String name = data.getString("OwnerName");
 			if (channel == -1) {
-				tooltip.add(new TranslatableComponent("jadeaddons.mcjtylib.ownedBy", name));
+				tooltip.add(Component.translatable("jadeaddons.mcjtylib.ownedBy", name));
 			} else {
-				tooltip.add(new TranslatableComponent("jadeaddons.mcjtylib.ownedBy.withChannel", name, channel));
+				tooltip.add(Component.translatable("jadeaddons.mcjtylib.ownedBy.withChannel", name, channel));
 			}
 			if (data.getBoolean("OwnerWarning")) {
-				tooltip.add(new TranslatableComponent("jadeaddons.mcjtylib.ownedBy.warning").withStyle(ChatFormatting.RED));
+				tooltip.add(Component.translatable("jadeaddons.mcjtylib.ownedBy.warning").withStyle(ChatFormatting.RED));
 			}
 		}
 	}
@@ -65,6 +63,11 @@ public enum BaseBlockProvider implements IComponentProvider, IServerDataProvider
 				}
 			}
 		}
+	}
+
+	@Override
+	public ResourceLocation getUid() {
+		return McjtyLibPlugin.GENERAL;
 	}
 
 }

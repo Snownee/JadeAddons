@@ -4,26 +4,27 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import mcjty.deepresonance.modules.core.block.ResonatingCrystalTileEntity;
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public enum CrystalProvider implements IComponentProvider, IServerDataProvider<BlockEntity> {
+public enum CrystalProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
 	INSTANCE;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!config.get(DeepResonancePlugin.CRYSTAL) || !accessor.getServerData().contains("DeepResonance")) {
+		if (!accessor.getServerData().contains("DeepResonance")) {
 			return;
 		}
 		CompoundTag tag = accessor.getServerData().getCompound("DeepResonance");
@@ -34,8 +35,8 @@ public enum CrystalProvider implements IComponentProvider, IServerDataProvider<B
 		double power = tag.getDouble("Power");
 		DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		decimalFormat.setRoundingMode(RoundingMode.DOWN);
-		tooltip.add(new TranslatableComponent("jadeaddons.deepresonance.sep", decimalFormat.format(strength), decimalFormat.format(efficiency), decimalFormat.format(purity)));
-		tooltip.add(new TranslatableComponent("jadeaddons.deepresonance.crystalPower", decimalFormat.format(power), rfpertick));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.sep", decimalFormat.format(strength), decimalFormat.format(efficiency), decimalFormat.format(purity)));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.crystalPower", decimalFormat.format(power), rfpertick));
 	}
 
 	@Override
@@ -49,6 +50,11 @@ public enum CrystalProvider implements IComponentProvider, IServerDataProvider<B
 			tag.putDouble("Power", crystal.getPower());
 			data.put("DeepResonance", tag);
 		}
+	}
+
+	@Override
+	public ResourceLocation getUid() {
+		return DeepResonancePlugin.CRYSTAL;
 	}
 
 }

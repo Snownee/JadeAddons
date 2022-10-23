@@ -1,4 +1,4 @@
-package snownee.jade.addon.tconstruct;
+/*package snownee.jade.addon.tconstruct;
 
 import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IWailaClientRegistration;
@@ -58,3 +58,4 @@ public class TConstructPlugin implements IWailaPlugin {
 	}
 
 }
+*/

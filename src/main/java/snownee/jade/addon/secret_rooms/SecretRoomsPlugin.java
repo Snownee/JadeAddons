@@ -1,4 +1,4 @@
-package snownee.jade.addon.secret_rooms;
+/*package snownee.jade.addon.secret_rooms;
 
 import com.wynprice.secretrooms.server.blocks.SecretBaseBlock;
 import com.wynprice.secretrooms.server.blocks.SecretBlocks;
@@ -67,3 +67,4 @@ public class SecretRoomsPlugin implements IWailaPlugin {
 	}
 
 }
+*/

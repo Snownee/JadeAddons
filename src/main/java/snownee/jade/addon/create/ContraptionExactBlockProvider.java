@@ -2,26 +2,25 @@ package snownee.jade.addon.create;
 
 import org.jetbrains.annotations.Nullable;
 
-import mcp.mobius.waila.Waila;
-import mcp.mobius.waila.api.EntityAccessor;
-import mcp.mobius.waila.api.IEntityComponentProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
-import mcp.mobius.waila.api.ui.IElement;
-import mcp.mobius.waila.impl.WailaClientRegistration;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.Identifiers;
+import snownee.jade.api.TooltipPosition;
+import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.IElement;
+import snownee.jade.impl.WailaClientRegistration;
 
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
-
-	static final ResourceLocation OBJECT_NAME_TAG = new ResourceLocation(Waila.MODID, "object_name");
 
 	private long time = Long.MIN_VALUE;
 	private BlockState hitBlock;
@@ -29,7 +28,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 
 	@Override
 	public @Nullable IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
-		if (config.get(CreatePlugin.CONTRAPTION_EXACT_BLOCK) && validate()) {
+		if (validate()) {
 			ItemStack stack = hitBlock.getCloneItemStack(hitResult, accessor.getLevel(), hitResult.getBlockPos(), accessor.getPlayer());
 			return CreatePlugin.client.getElementHelper().item(stack);
 		}
@@ -38,7 +37,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
-		if (!config.get(CreatePlugin.CONTRAPTION_EXACT_BLOCK) || !validate()) {
+		if (!validate()) {
 			return;
 		}
 		Component name = null;
@@ -56,12 +55,12 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 				if (pick != null && !pick.isEmpty()) {
 					name = pick.getHoverName();
 				} else {
-					name = new TextComponent(key);
+					name = Component.literal(key);
 				}
 			}
 		}
-		tooltip.remove(OBJECT_NAME_TAG);
-		tooltip.add(0, new TextComponent(String.format(config.getWailaConfig().getFormatting().getBlockName(), name.getString())).withStyle(Waila.CONFIG.get().getOverlay().getColor().getTitle().withItalic(true)), OBJECT_NAME_TAG);
+		tooltip.remove(Identifiers.CORE_OBJECT_NAME);
+		tooltip.add(0, config.getWailaConfig().getFormatting().title(name).copy().withStyle(ChatFormatting.ITALIC), Identifiers.CORE_OBJECT_NAME);
 	}
 
 	public void setHit(BlockHitResult hitResult, BlockState hitBlock) {
@@ -72,6 +71,16 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 
 	private boolean validate() {
 		return (Util.getMillis() - time) < 10;
+	}
+
+	@Override
+	public ResourceLocation getUid() {
+		return CreatePlugin.CONTRAPTION_EXACT_BLOCK;
+	}
+
+	@Override
+	public int getDefaultPriority() {
+		return TooltipPosition.HEAD;
 	}
 
 }

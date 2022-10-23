@@ -1,5 +1,7 @@
 package snownee.jade.addon.create;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
@@ -11,16 +13,6 @@ import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline.Bezi
 import com.simibubi.create.foundation.utility.RaycastHelper;
 import com.simibubi.create.foundation.utility.RaycastHelper.PredicateTraceResult;
 
-import mcp.mobius.waila.api.Accessor;
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.EntityAccessor;
-import mcp.mobius.waila.api.IWailaClientRegistration;
-import mcp.mobius.waila.api.IWailaCommonRegistration;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.TooltipPosition;
-import mcp.mobius.waila.api.WailaPlugin;
-import mcp.mobius.waila.api.event.WailaRayTraceEvent;
-import mcp.mobius.waila.overlay.RayTracing;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -29,12 +21,20 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.HitResult.Type;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
+import snownee.jade.api.Accessor;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaCommonRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
+import snownee.jade.impl.ObjectDataCenter;
+import snownee.jade.overlay.RayTracing;
 
 @WailaPlugin(CreatePlugin.ID)
 public class CreatePlugin implements IWailaPlugin {
@@ -48,11 +48,6 @@ public class CreatePlugin implements IWailaPlugin {
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
-		registration.addConfig(CRAFTING_BLUEPRINT, true);
-		registration.addConfig(PLACARD, true);
-		registration.addConfig(BLAZE_BURNER, true);
-		registration.addConfig(CONTRAPTION_INVENTORY, true);
-		registration.addConfig(CONTRAPTION_EXACT_BLOCK, true);
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
 		registration.registerEntityDataProvider(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
 	}
@@ -62,14 +57,14 @@ public class CreatePlugin implements IWailaPlugin {
 	@OnlyIn(Dist.CLIENT)
 	public void registerClient(IWailaClientRegistration registration) {
 		client = registration;
-		registration.registerComponentProvider(CraftingBlueprintProvider.INSTANCE, TooltipPosition.BODY, BlueprintEntity.class);
-		registration.registerIconProvider(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
-		registration.registerComponentProvider(PlacardProvider.INSTANCE, TooltipPosition.BODY, PlacardBlock.class);
-		registration.registerIconProvider(PlacardProvider.INSTANCE, PlacardBlock.class);
-		registration.registerComponentProvider(BlazeBurnerProvider.INSTANCE, TooltipPosition.BODY, BlazeBurnerBlock.class);
-		registration.registerComponentProvider(ContraptionInventoryProvider.INSTANCE, TooltipPosition.BODY, AbstractContraptionEntity.class);
-		registration.registerIconProvider(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
-		registration.registerComponentProvider(ContraptionExactBlockProvider.INSTANCE, TooltipPosition.HEAD, AbstractContraptionEntity.class);
+		registration.registerEntityComponent(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
+		registration.registerEntityIcon(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
+		registration.registerBlockComponent(PlacardProvider.INSTANCE, PlacardBlock.class);
+		registration.registerBlockIcon(PlacardProvider.INSTANCE, PlacardBlock.class);
+		registration.registerBlockComponent(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlock.class);
+		registration.registerEntityComponent(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerEntityIcon(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
 			if (!(e instanceof AbstractContraptionEntity)) {
@@ -102,21 +97,29 @@ public class CreatePlugin implements IWailaPlugin {
 			return predicateResult != null && !predicateResult.missed();
 		});
 
-		MinecraftForge.EVENT_BUS.addListener(this::override);
+		registration.addRayTraceCallback(this::override);
 	}
 
-	public void override(WailaRayTraceEvent event) {
+	public Accessor<?> override(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) {
 		BezierPointSelection result = TrackBlockOutline.result;
 		if (result == null) {
-			return;
+			return accessor;
 		}
-		Accessor<?> accessor = event.getAccessor();
-		if (accessor instanceof EntityAccessor) {
-			return;
+		if (originalAccessor instanceof EntityAccessor) {
+			return accessor;
 		}
-		BlockHitResult hitResult = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
-		BlockAccessor newAccessor = client.createBlockAccessor(result.te().getBlockState(), result.te(), accessor.getLevel(), accessor.getPlayer(), accessor.getServerData(), hitResult, accessor.isServerConnected());
-		event.setAccessor(newAccessor);
+		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
+		/* off */
+		return client.blockAccessor()
+				.blockState(result.te().getBlockState())
+				.blockEntity(result.te())
+				.level(Minecraft.getInstance().level)
+				.player(Minecraft.getInstance().player)
+				.hit(trackHit)
+				.serverConnected(ObjectDataCenter.serverConnected)
+				.serverData(ObjectDataCenter.getServerData())
+				.build();
+		/* on */
 	}
 
 }

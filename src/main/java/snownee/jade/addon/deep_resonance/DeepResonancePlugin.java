@@ -4,12 +4,11 @@ import mcjty.deepresonance.modules.core.block.ResonatingCrystalBlock;
 import mcjty.deepresonance.modules.core.block.ResonatingCrystalTileEntity;
 import mcjty.deepresonance.modules.generator.block.GeneratorPartBlock;
 import mcjty.deepresonance.modules.generator.block.GeneratorPartTileEntity;
-import mcp.mobius.waila.api.IWailaClientRegistration;
-import mcp.mobius.waila.api.IWailaCommonRegistration;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.TooltipPosition;
-import mcp.mobius.waila.api.WailaPlugin;
 import net.minecraft.resources.ResourceLocation;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaCommonRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
 
 @WailaPlugin(DeepResonancePlugin.ID)
 public class DeepResonancePlugin implements IWailaPlugin {
@@ -19,16 +18,14 @@ public class DeepResonancePlugin implements IWailaPlugin {
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
-		registration.addConfig(CRYSTAL, true);
-		registration.addConfig(GENERATOR_PART, true);
 		registration.registerBlockDataProvider(CrystalProvider.INSTANCE, ResonatingCrystalTileEntity.class);
 		registration.registerBlockDataProvider(GeneratorPartProvider.INSTANCE, GeneratorPartTileEntity.class);
 	}
 
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
-		registration.registerComponentProvider(CrystalProvider.INSTANCE, TooltipPosition.BODY, ResonatingCrystalBlock.class);
-		registration.registerComponentProvider(GeneratorPartProvider.INSTANCE, TooltipPosition.BODY, GeneratorPartBlock.class);
+		registration.registerBlockComponent(CrystalProvider.INSTANCE, ResonatingCrystalBlock.class);
+		registration.registerBlockComponent(GeneratorPartProvider.INSTANCE, GeneratorPartBlock.class);
 	}
 
 }

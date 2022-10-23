@@ -5,14 +5,9 @@ import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlo
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity.FuelType;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
-import mcp.mobius.waila.api.ui.IElementHelper;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,16 +16,19 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.Jade;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.IElementHelper;
 
-public enum BlazeBurnerProvider implements IComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
 	INSTANCE;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!config.get(CreatePlugin.BLAZE_BURNER)) {
-			return;
-		}
 		CompoundTag compound = accessor.getServerData();
 		FuelType activeFuel = FuelType.NONE;
 		boolean isCreative = compound.getBoolean("isCreative");
@@ -51,9 +49,9 @@ public enum BlazeBurnerProvider implements IComponentProvider, IServerDataProvid
 		ItemStack item = new ItemStack(activeFuel == FuelType.SPECIAL ? Items.SOUL_CAMPFIRE : Items.CAMPFIRE);
 		tooltip.add(Jade.smallItem(elements, item));
 		if (isCreative) {
-			tooltip.append(new TranslatableComponent("jade.infinity"));
+			tooltip.append(Component.translatable("jade.infinity"));
 		} else {
-			tooltip.append(new TranslatableComponent("jade.seconds", compound.getInt("burnTimeRemaining") / 20));
+			tooltip.append(Component.translatable("jade.seconds", compound.getInt("burnTimeRemaining") / 20));
 		}
 	}
 
@@ -66,6 +64,11 @@ public enum BlazeBurnerProvider implements IComponentProvider, IServerDataProvid
 			data.putInt("fuelLevel", burner.getActiveFuel().ordinal());
 			data.putInt("burnTimeRemaining", burner.getRemainingBurnTime());
 		}
+	}
+
+	@Override
+	public ResourceLocation getUid() {
+		return CreatePlugin.BLAZE_BURNER;
 	}
 
 }

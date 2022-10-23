@@ -2,35 +2,36 @@ package snownee.jade.addon.deep_resonance;
 
 import mcjty.deepresonance.modules.generator.block.GeneratorPartTileEntity;
 import mcjty.deepresonance.modules.generator.data.GeneratorBlob;
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public enum GeneratorPartProvider implements IComponentProvider, IServerDataProvider<BlockEntity> {
+public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
 	INSTANCE;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!config.get(DeepResonancePlugin.GENERATOR_PART) || !accessor.getServerData().contains("DeepResonance")) {
+		if (!accessor.getServerData().contains("DeepResonance")) {
 			return;
 		}
 		CompoundTag tag = accessor.getServerData().getCompound("DeepResonance");
 		int id = tag.getInt("Id");
 		int collectors = tag.getInt("Collectors");
 		int generators = tag.getInt("Generators");
-		tooltip.add(new TranslatableComponent("jadeaddons.deepresonance.id", id));
-		tooltip.add(new TranslatableComponent("jadeaddons.deepresonance.collectors", collectors));
-		tooltip.add(new TranslatableComponent("jadeaddons.deepresonance.generators", generators));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.id", id));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.collectors", collectors));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.generators", generators));
 	}
 
 	@Override
@@ -43,6 +44,11 @@ public enum GeneratorPartProvider implements IComponentProvider, IServerDataProv
 			tag.putInt("Generators", network.getGeneratorBlocks());
 			data.put("DeepResonance", tag);
 		}
+	}
+
+	@Override
+	public ResourceLocation getUid() {
+		return DeepResonancePlugin.GENERATOR_PART;
 	}
 
 }
