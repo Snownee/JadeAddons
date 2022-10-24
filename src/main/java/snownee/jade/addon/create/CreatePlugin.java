@@ -100,6 +100,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.addRayTraceCallback(this::override);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public Accessor<?> override(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) {
 		BezierPointSelection result = TrackBlockOutline.result;
 		if (result == null) {
