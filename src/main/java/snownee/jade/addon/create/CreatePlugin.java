@@ -18,6 +18,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.BlockHitResult;
@@ -44,6 +45,7 @@ public class CreatePlugin implements IWailaPlugin {
 	public static final ResourceLocation BLAZE_BURNER = new ResourceLocation(ID, "blaze_burner");
 	public static final ResourceLocation CONTRAPTION_INVENTORY = new ResourceLocation(ID, "contraption_inv");
 	public static final ResourceLocation CONTRAPTION_EXACT_BLOCK = new ResourceLocation(ID, "exact_block");
+	public static final ResourceLocation FILTER = new ResourceLocation(ID, "filter");
 	static IWailaClientRegistration client;
 
 	@Override
@@ -65,6 +67,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerBlockComponent(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlock.class);
 		registration.registerEntityIcon(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerBlockComponent(FilterProvider.INSTANCE, Block.class);
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
