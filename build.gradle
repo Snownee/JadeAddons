@@ -93,9 +93,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
-    implementation fg.deobf("curse.maven:jei-238222:4030307")
-    implementation fg.deobf("curse.maven:jade-324717:4044091")
-    //implementation fg.deobf("libs:Jade-1.18.1:4.4.0")
+    implementation fg.deobf("curse.maven:jei-238222:4068188")
+    //implementation fg.deobf("curse.maven:jade-324717:4077682")
+    implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     
     //implementation fg.deobf("curse.maven:secret-rooms-59652:3764897")
     

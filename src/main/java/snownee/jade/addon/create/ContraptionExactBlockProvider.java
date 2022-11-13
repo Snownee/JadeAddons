@@ -17,7 +17,6 @@ import snownee.jade.api.Identifiers;
 import snownee.jade.api.TooltipPosition;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
-import snownee.jade.impl.WailaClientRegistration;
 
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
@@ -41,7 +40,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 			return;
 		}
 		Component name = null;
-		if (WailaClientRegistration.INSTANCE.shouldPick(hitBlock)) {
+		if (CreatePlugin.client.shouldPick(hitBlock)) {
 			ItemStack pick = hitBlock.getCloneItemStack(hitResult, accessor.getLevel(), hitResult.getBlockPos(), accessor.getPlayer());
 			if (pick != null && !pick.isEmpty())
 				name = pick.getHoverName();

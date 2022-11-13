@@ -15,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import snownee.jade.Jade;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -45,9 +44,8 @@ public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataP
 		if (activeFuel == FuelType.NONE) {
 			return;
 		}
-		IElementHelper elements = tooltip.getElementHelper();
 		ItemStack item = new ItemStack(activeFuel == FuelType.SPECIAL ? Items.SOUL_CAMPFIRE : Items.CAMPFIRE);
-		tooltip.add(Jade.smallItem(elements, item));
+		tooltip.add(IElementHelper.get().smallItem(item));
 		if (isCreative) {
 			tooltip.append(Component.translatable("jade.infinity"));
 		} else {

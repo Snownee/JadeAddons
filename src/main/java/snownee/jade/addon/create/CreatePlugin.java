@@ -49,7 +49,8 @@ public class CreatePlugin implements IWailaPlugin {
 	@Override
 	public void register(IWailaCommonRegistration registration) {
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
-		registration.registerEntityDataProvider(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerItemStorage(ContraptionItemStorageProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerFluidStorage(ContraptionFluidStorageProvider.INSTANCE, AbstractContraptionEntity.class);
 	}
 
 	// See ContraptionHandlerClient
@@ -62,9 +63,11 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerBlockComponent(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerBlockIcon(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerBlockComponent(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlock.class);
-		registration.registerEntityComponent(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerEntityIcon(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
+
+		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
+		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
 			if (!(e instanceof AbstractContraptionEntity)) {

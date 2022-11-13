@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
+import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -21,6 +22,17 @@ public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataPro
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+		appendTooltip(tooltip, accessor);
+	}
+
+	@Override
+	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
+		if (blockEntity instanceof ILootBlockEntity tile) {
+			appendServerData(data, tile.getTileId());
+		}
+	}
+
+	public static void appendTooltip(ITooltip tooltip, Accessor<?> accessor) {
 		CompoundTag data = accessor.getServerData();
 		int decayValue = data.getInt("LootrDecay");
 		if (decayValue > 0) {
@@ -36,23 +48,19 @@ public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataPro
 		}
 	}
 
-	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		if (blockEntity instanceof ILootBlockEntity tile) {
-			UUID id = tile.getTileId();
-			if (!DataStorage.isDecayed(id)) {
-				int decayValue = DataStorage.getDecayValue(id);
-				if (decayValue > 0) {
-					data.putInt("LootrDecay", decayValue);
-				}
+	public static void appendServerData(CompoundTag data, UUID id) {
+		if (!DataStorage.isDecayed(id)) {
+			int decayValue = DataStorage.getDecayValue(id);
+			if (decayValue > 0) {
+				data.putInt("LootrDecay", decayValue);
 			}
-			if (DataStorage.isRefreshed(id)) {
-				data.putBoolean("LootrRefreshed", true);
-			} else {
-				int refreshValue = DataStorage.getRefreshValue(id);
-				if (refreshValue > 0) {
-					data.putInt("LootrRefresh", refreshValue);
-				}
+		}
+		if (DataStorage.isRefreshed(id)) {
+			data.putBoolean("LootrRefreshed", true);
+		} else {
+			int refreshValue = DataStorage.getRefreshValue(id);
+			if (refreshValue > 0) {
+				data.putInt("LootrRefresh", refreshValue);
 			}
 		}
 	}
