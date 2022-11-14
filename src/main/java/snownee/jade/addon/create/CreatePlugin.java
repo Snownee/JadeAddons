@@ -2,6 +2,7 @@ package snownee.jade.addon.create;
 
 import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
+import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
 import com.simibubi.create.content.curiosities.deco.PlacardBlock;
@@ -54,6 +55,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.addConfig(CONTRAPTION_INVENTORY, true);
 		registration.addConfig(CONTRAPTION_EXACT_BLOCK, true);
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
+		registration.registerBlockDataProvider(HideBoilerHandlerProvider.INSTANCE, FluidTankTileEntity.class);
 		registration.registerEntityDataProvider(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
 	}
 
