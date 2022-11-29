@@ -1,58 +1,55 @@
-/*package snownee.jade.addon.secret_rooms;
+package snownee.jade.addon.secret_rooms;
+
+import org.jetbrains.annotations.Nullable;
 
 import com.wynprice.secretrooms.server.blocks.SecretBaseBlock;
 import com.wynprice.secretrooms.server.blocks.SecretBlocks;
 import com.wynprice.secretrooms.server.items.TrueVisionGogglesClientHandler;
 
-import mcp.mobius.waila.api.Accessor;
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IWailaClientRegistration;
-import mcp.mobius.waila.api.IWailaCommonRegistration;
-import mcp.mobius.waila.api.IWailaPlugin;
-import mcp.mobius.waila.api.WailaPlugin;
-import mcp.mobius.waila.api.event.WailaRayTraceEvent;
-import mcp.mobius.waila.impl.config.PluginConfig;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import snownee.jade.addon.JadeAddons;
+import snownee.jade.api.Accessor;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IWailaClientRegistration;
+import snownee.jade.api.IWailaPlugin;
+import snownee.jade.api.WailaPlugin;
+import snownee.jade.impl.config.PluginConfig;
 
 @WailaPlugin(SecretRoomsPlugin.ID)
 public class SecretRoomsPlugin implements IWailaPlugin {
 	public static final String ID = "secretroomsmod";
-	public static final ResourceLocation MAIN = new ResourceLocation(ID, JadeAddons.ID);
+	public static final ResourceLocation ENABLED = new ResourceLocation(ID, JadeAddons.ID);
 	private static IWailaClientRegistration client;
-
-	@Override
-	public void register(IWailaCommonRegistration registration) {
-		registration.addConfig(MAIN, true);
-	}
 
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
 		client = registration;
-		MinecraftForge.EVENT_BUS.addListener(this::override);
+		registration.addConfig(ENABLED, true);
+		registration.addRayTraceCallback(this::override);
 	}
 
+	@SuppressWarnings("deprecation")
 	@OnlyIn(Dist.CLIENT)
-	public void override(WailaRayTraceEvent event) {
-		if (!PluginConfig.INSTANCE.get(MAIN))
-			return;
-		Accessor<?> accessor = event.getAccessor();
-		if (accessor.getPlayer().isSpectator())
-			return;
+	public Accessor<?> override(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> original) {
+		if (!PluginConfig.INSTANCE.get(ENABLED))
+			return accessor;
 		if (!(accessor instanceof BlockAccessor))
-			return;
+			return accessor;
+		if (accessor.getPlayer().isSpectator())
+			return accessor;
 		BlockAccessor blockAccessor = (BlockAccessor) accessor;
 		Block block = blockAccessor.getBlock();
-		if (!ID.equals(block.getRegistryName().getNamespace()))
-			return;
+		if (!ID.equals(Registry.BLOCK.getKey(block).getNamespace()))
+			return accessor;
 		if (TrueVisionGogglesClientHandler.isWearingGoggles(accessor.getPlayer()))
-			return;
+			return accessor;
 		BlockState mirror;
 		if (block == SecretBlocks.TORCH_LEVER.get()) {
 			mirror = Blocks.TORCH.defaultBlockState();
@@ -62,9 +59,17 @@ public class SecretRoomsPlugin implements IWailaPlugin {
 			mirror = SecretBaseBlock.getMirrorState(accessor.getLevel(), blockAccessor.getPosition()).orElse(null);
 		}
 		if (mirror == null)
-			return;
-		event.setAccessor(client.createBlockAccessor(mirror, null, accessor.getLevel(), accessor.getPlayer(), null, blockAccessor.getHitResult(), accessor.isServerConnected()));
+			return accessor;
+		/* off */
+		return client.blockAccessor()
+				.blockState(mirror)
+				.blockEntity(null)
+				.level(accessor.getLevel())
+				.player(accessor.getPlayer())
+				.hit(blockAccessor.getHitResult())
+				.serverConnected(accessor.isServerConnected())
+				.build();
+		/* on */
 	}
 
 }
-*/

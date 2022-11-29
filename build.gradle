@@ -94,10 +94,10 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
     implementation fg.deobf("curse.maven:jei-238222:4068188")
-    //implementation fg.deobf("curse.maven:jade-324717:4077682")
-    implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
+    implementation fg.deobf("curse.maven:jade-324717:4096513")
+    //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     
-    //implementation fg.deobf("curse.maven:secret-rooms-59652:3764897")
+    implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
     
     //implementation fg.deobf("curse.maven:mantle-74924:3829975")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")

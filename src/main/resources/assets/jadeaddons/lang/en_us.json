@@ -1,4 +1,5 @@
 {
+"config.jade.plugin_secretrooms.jadeaddons": "Enabled",
 "config.jade.plugin_secretroomsmod.jadeaddons": "Enabled",
 "config.jade.plugin_create.blaze_burner": "Blaze Burner",
 "config.jade.plugin_create.crafting_blueprint": "Crafting Blueprint",
