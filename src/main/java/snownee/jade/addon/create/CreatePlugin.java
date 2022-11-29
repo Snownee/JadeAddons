@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
+import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
 import com.simibubi.create.content.curiosities.deco.PlacardBlock;
@@ -46,6 +47,7 @@ public class CreatePlugin implements IWailaPlugin {
 	public static final ResourceLocation CONTRAPTION_INVENTORY = new ResourceLocation(ID, "contraption_inv");
 	public static final ResourceLocation CONTRAPTION_EXACT_BLOCK = new ResourceLocation(ID, "exact_block");
 	public static final ResourceLocation FILTER = new ResourceLocation(ID, "filter");
+	public static final ResourceLocation HIDE_BOILER_TANKS = new ResourceLocation(ID, "hide_boiler_tanks");
 	static IWailaClientRegistration client;
 
 	@Override
@@ -53,6 +55,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
 		registration.registerItemStorage(ContraptionItemStorageProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerFluidStorage(ContraptionFluidStorageProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerFluidStorage(HideBoilerHandlerProvider.INSTANCE, FluidTankTileEntity.class);
 	}
 
 	// See ContraptionHandlerClient
@@ -71,6 +74,7 @@ public class CreatePlugin implements IWailaPlugin {
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
+		registration.registerFluidStorageClient(HideBoilerHandlerProvider.INSTANCE);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
 			if (!(e instanceof AbstractContraptionEntity)) {
