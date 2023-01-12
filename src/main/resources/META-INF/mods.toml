@@ -13,7 +13,7 @@ description="Jade additional mod supports"
 [[dependencies.jadeaddons]]
     modId="jade"
     mandatory=true
-    versionRange="[8.4.1, )"
+    versionRange="[8.7, )"
     ordering="NONE"
     side="BOTH"
 

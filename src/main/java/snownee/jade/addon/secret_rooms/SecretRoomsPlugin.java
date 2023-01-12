@@ -64,10 +64,7 @@ public class SecretRoomsPlugin implements IWailaPlugin {
 		return client.blockAccessor()
 				.blockState(mirror)
 				.blockEntity(null)
-				.level(accessor.getLevel())
-				.player(accessor.getPlayer())
 				.hit(blockAccessor.getHitResult())
-				.serverConnected(accessor.isServerConnected())
 				.build();
 		/* on */
 	}

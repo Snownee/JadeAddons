@@ -6,12 +6,15 @@
 "config.jade.plugin_create.placard": "Placard",
 "config.jade.plugin_create.exact_block": "Contraption Exact Block",
 "config.jade.plugin_create.filter": "Filter",
+"config.jade.plugin_create.copper_backtank": "Copper Backtank",
 "config.jade.plugin_tconstruct.casting_table": "Casting Table",
 "config.jade.plugin_tconstruct.drain": "Drain & Duct",
 "config.jade.plugin_mcjtylib.jadeaddons": "Enabled",
 "config.jade.plugin_deepresonance.crystal": "Crystal",
 "config.jade.plugin_deepresonance.generator_part": "Generator Part",
 "config.jade.plugin_lootr.info": "Information",
+
+"jadeaddons.create.backtank_air": "Air: %s/%s",
 
 "jadeaddons.mcjtylib.infused": "Infused: %s%%",
 "jadeaddons.mcjtylib.ownedBy": "Owned by: %s",
