@@ -31,6 +31,7 @@ import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -43,18 +44,22 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 	private static final ResourceLocation CREATE_OVERLAY_ID = new ResourceLocation(CreatePlugin.ID, "goggle_info");
 
-	public static void hideCreateOverlay(RenderGuiOverlayEvent.Pre event) {
-		if (event.getOverlay().id().equals(CREATE_OVERLAY_ID) && IWailaConfig.get().getPlugin().get(CreatePlugin.GOGGLES)) {
-			event.setCanceled(true);
-		}
-	}
-
 	@SuppressWarnings("deprecation")
 	private static Block block(String id) {
 		return Registry.BLOCK.get(new ResourceLocation(CreatePlugin.ID, id));
 	}
 
 	private final Block PISTON_EXTENSION_POLE = block("piston_extension_pole");
+
+	public GogglesProvider() {
+		MinecraftForge.EVENT_BUS.addListener(this::hideCreateOverlay);
+	}
+
+	private void hideCreateOverlay(RenderGuiOverlayEvent.Pre event) {
+		if (event.getOverlay().id().equals(CREATE_OVERLAY_ID) && IWailaConfig.get().getPlugin().get(CreatePlugin.GOGGLES)) {
+			event.setCanceled(true);
+		}
+	}
 
 	@Override
 	public ResourceLocation getUid() {

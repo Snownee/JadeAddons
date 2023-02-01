@@ -31,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IWailaClientRegistration;
@@ -120,8 +119,6 @@ public class CreatePlugin implements IWailaPlugin {
 		});
 
 		registration.addRayTraceCallback(this::override);
-
-		MinecraftForge.EVENT_BUS.addListener(GogglesProvider::hideCreateOverlay);
 	}
 
 	@OnlyIn(Dist.CLIENT)
