@@ -31,12 +31,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
+import snownee.jade.api.config.IWailaConfig;
 import snownee.jade.overlay.RayTracing;
 
 @WailaPlugin(CreatePlugin.ID)
@@ -50,6 +52,9 @@ public class CreatePlugin implements IWailaPlugin {
 	public static final ResourceLocation FILTER = new ResourceLocation(ID, "filter");
 	public static final ResourceLocation HIDE_BOILER_TANKS = new ResourceLocation(ID, "hide_boiler_tanks");
 	public static final ResourceLocation COPPER_BACKTANK = new ResourceLocation(ID, "copper_backtank");
+	public static final ResourceLocation GOGGLES = new ResourceLocation(ID, "goggles");
+	public static final ResourceLocation REQUIRES_GOGGLES = new ResourceLocation(ID, "goggles.requires_goggles");
+	public static final ResourceLocation GOGGLES_DETAILED = new ResourceLocation(ID, "goggles.detailed");
 	static IWailaClientRegistration client;
 
 	@Override
@@ -66,6 +71,8 @@ public class CreatePlugin implements IWailaPlugin {
 	@OnlyIn(Dist.CLIENT)
 	public void registerClient(IWailaClientRegistration registration) {
 		client = registration;
+		registration.addConfig(REQUIRES_GOGGLES, true);
+		registration.addConfig(GOGGLES_DETAILED, false);
 		registration.registerEntityComponent(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
 		registration.registerEntityIcon(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
 		registration.registerBlockComponent(PlacardProvider.INSTANCE, PlacardBlock.class);
@@ -75,6 +82,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerBlockComponent(FilterProvider.INSTANCE, Block.class);
 		registration.registerBlockComponent(CopperBacktankProvider.INSTANCE, CopperBacktankBlock.class);
+		registration.registerBlockComponent(new GogglesProvider(), Block.class);
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
@@ -88,7 +96,7 @@ public class CreatePlugin implements IWailaPlugin {
 			Entity camera = mc.getCameraEntity();
 			Vec3 origin = camera.getEyePosition(mc.getFrameTime());
 			Vec3 lookVector = camera.getViewVector(mc.getFrameTime());
-			float reach = mc.gameMode.getPickRange() + client.getConfig().getGeneral().getReachDistance();
+			float reach = mc.gameMode.getPickRange() + IWailaConfig.get().getGeneral().getReachDistance();
 			Vec3 target = origin.add(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach);
 			AbstractContraptionEntity contraptionEntity = (AbstractContraptionEntity) e;
 			Vec3 localOrigin = contraptionEntity.toLocalVector(origin, 1);
@@ -112,6 +120,8 @@ public class CreatePlugin implements IWailaPlugin {
 		});
 
 		registration.addRayTraceCallback(this::override);
+
+		MinecraftForge.EVENT_BUS.addListener(GogglesProvider::hideCreateOverlay);
 	}
 
 	@OnlyIn(Dist.CLIENT)

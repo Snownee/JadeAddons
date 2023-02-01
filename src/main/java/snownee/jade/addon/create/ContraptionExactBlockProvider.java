@@ -17,6 +17,7 @@ import snownee.jade.api.Identifiers;
 import snownee.jade.api.TooltipPosition;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElement;
+import snownee.jade.api.ui.IElementHelper;
 
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
@@ -29,7 +30,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	public @Nullable IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
 		if (validate()) {
 			ItemStack stack = hitBlock.getCloneItemStack(hitResult, accessor.getLevel(), hitResult.getBlockPos(), accessor.getPlayer());
-			return CreatePlugin.client.getElementHelper().item(stack);
+			return IElementHelper.get().item(stack);
 		}
 		return null;
 	}

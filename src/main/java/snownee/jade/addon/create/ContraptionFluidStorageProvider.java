@@ -33,7 +33,7 @@ public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<
 
 	@Override
 	public List<ViewGroup<CompoundTag>> getGroups(ServerPlayer player, ServerLevel level, AbstractContraptionEntity entity, boolean showDetails) {
-		Contraption contraption = ((AbstractContraptionEntity) entity).getContraption();
+		Contraption contraption = entity.getContraption();
 		return FluidView.fromFluidHandler(contraption.getSharedFluidTanks());
 	}
 

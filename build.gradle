@@ -1,13 +1,11 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://maven.parchmentmc.org' }
         maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
         classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
@@ -93,9 +91,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
-    implementation fg.deobf("curse.maven:jei-238222:4068188")
+    implementation fg.deobf("curse.maven:jei-238222:4354615")
     implementation fg.deobf("curse.maven:jade-324717:4318618")
-    implementation fg.deobf("curse.maven:kiwi-303657:3974084")
+    implementation fg.deobf("curse.maven:kiwi-303657:4036329")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     
     implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
@@ -106,9 +104,9 @@ dependencies {
     implementation fg.deobf("curse.maven:create-328085:4011414")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
     
-    implementation fg.deobf("curse.maven:deep-resonance-233398:4014841")
-    implementation fg.deobf("curse.maven:rftools-base-326041:3970757")
-    implementation fg.deobf("curse.maven:mcjtylib-233105:3994824")
+    implementation fg.deobf("curse.maven:deep-resonance-233398:4373508")
+    implementation fg.deobf("curse.maven:rftools-base-326041:4373507")
+    implementation fg.deobf("curse.maven:mcjtylib-233105:4372084")
     
     implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
     
@@ -116,7 +114,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
     //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
     
-    implementation fg.deobf("curse.maven:lootr-361276:3891821")
+    implementation fg.deobf("curse.maven:lootr-361276:4179721")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

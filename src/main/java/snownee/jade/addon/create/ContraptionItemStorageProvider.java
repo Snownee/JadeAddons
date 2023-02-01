@@ -32,7 +32,7 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<A
 
 	@Override
 	public List<ViewGroup<ItemStack>> getGroups(ServerPlayer player, ServerLevel level, AbstractContraptionEntity entity, boolean showDetails) {
-		Contraption contraption = ((AbstractContraptionEntity) entity).getContraption();
+		Contraption contraption = entity.getContraption();
 		return List.of(ItemView.fromItemHandler(contraption.getSharedInventory(), 54, 0));
 	}
 
