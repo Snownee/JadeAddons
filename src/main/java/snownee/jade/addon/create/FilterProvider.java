@@ -1,10 +1,10 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.logistics.item.filter.AttributeFilterContainer.WhitelistMode;
-import com.simibubi.create.content.logistics.item.filter.FilterItem;
-import com.simibubi.create.content.logistics.item.filter.ItemAttribute;
-import com.simibubi.create.foundation.tileEntity.SmartTileEntity;
-import com.simibubi.create.foundation.tileEntity.behaviour.filtering.FilteringBehaviour;
+import com.simibubi.create.content.logistics.filter.AttributeFilterMenu.WhitelistMode;
+import com.simibubi.create.content.logistics.filter.FilterItem;
+import com.simibubi.create.content.logistics.filter.ItemAttribute;
+import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 
@@ -36,10 +36,10 @@ public enum FilterProvider implements IBlockComponentProvider {
 	@Override
 	@SuppressWarnings("deprecation")
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!accessor.showDetails() || !(accessor.getBlockEntity() instanceof SmartTileEntity)) {
+		if (!accessor.showDetails() || !(accessor.getBlockEntity() instanceof SmartBlockEntity)) {
 			return;
 		}
-		SmartTileEntity te = (SmartTileEntity) accessor.getBlockEntity();
+		SmartBlockEntity te = (SmartBlockEntity) accessor.getBlockEntity();
 		FilteringBehaviour behaviour = te.getBehaviour(FilteringBehaviour.TYPE);
 		if (behaviour == null) {
 			return;

@@ -1,7 +1,7 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.curiosities.armor.BackTankUtil;
-import com.simibubi.create.content.curiosities.armor.CopperBacktankTileEntity;
+import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
+import com.simibubi.create.content.equipment.armor.BacktankUtil;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -18,21 +18,21 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum CopperBacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
 	INSTANCE;
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
 		CompoundTag data = accessor.getServerData();
 		if (data.contains("Air")) {
-			int maxair = BackTankUtil.maxAir(data.getInt("Capacity"));
+			int maxair = BacktankUtil.maxAir(data.getInt("Capacity"));
 			tooltip.add(Component.translatable("jadeaddons.create.backtank_air", JadeAddons.seconds(data.getInt("Air")), JadeAddons.seconds(maxair)));
 		}
 	}
 
 	@Override
 	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		CopperBacktankTileEntity backtank = (CopperBacktankTileEntity) blockEntity;
+		BacktankBlockEntity backtank = (BacktankBlockEntity) blockEntity;
 		data.putInt("Air", backtank.getAirLevel());
 		for (Tag tag : backtank.getEnchantmentTag()) {
 			ResourceLocation id = EnchantmentHelper.getEnchantmentId((CompoundTag) tag);

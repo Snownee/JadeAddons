@@ -2,17 +2,17 @@ package snownee.jade.addon.create;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
-import com.simibubi.create.content.curiosities.armor.CopperBacktankBlock;
-import com.simibubi.create.content.curiosities.armor.CopperBacktankTileEntity;
-import com.simibubi.create.content.curiosities.deco.PlacardBlock;
-import com.simibubi.create.content.curiosities.tools.BlueprintEntity;
-import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline;
-import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline.BezierPointSelection;
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.decoration.placard.PlacardBlock;
+import com.simibubi.create.content.equipment.armor.BacktankBlock;
+import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
+import com.simibubi.create.content.equipment.blueprint.BlueprintEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import com.simibubi.create.content.trains.track.TrackBlockOutline;
+import com.simibubi.create.content.trains.track.TrackBlockOutline.BezierPointSelection;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 import com.simibubi.create.foundation.utility.RaycastHelper.PredicateTraceResult;
 
@@ -58,11 +58,11 @@ public class CreatePlugin implements IWailaPlugin {
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
-		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
-		registration.registerBlockDataProvider(CopperBacktankProvider.INSTANCE, CopperBacktankTileEntity.class);
+		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlockEntity.class);
+		registration.registerBlockDataProvider(BacktankProvider.INSTANCE, BacktankBlockEntity.class);
 		registration.registerItemStorage(ContraptionItemStorageProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerFluidStorage(ContraptionFluidStorageProvider.INSTANCE, AbstractContraptionEntity.class);
-		registration.registerFluidStorage(HideBoilerHandlerProvider.INSTANCE, FluidTankTileEntity.class);
+		registration.registerFluidStorage(HideBoilerHandlerProvider.INSTANCE, FluidTankBlockEntity.class);
 	}
 
 	// See ContraptionHandlerClient
@@ -80,7 +80,7 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerEntityIcon(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerBlockComponent(FilterProvider.INSTANCE, Block.class);
-		registration.registerBlockComponent(CopperBacktankProvider.INSTANCE, CopperBacktankBlock.class);
+		registration.registerBlockComponent(BacktankProvider.INSTANCE, BacktankBlock.class);
 		registration.registerBlockComponent(new GogglesProvider(), Block.class);
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
@@ -130,11 +130,11 @@ public class CreatePlugin implements IWailaPlugin {
 		if (originalAccessor instanceof EntityAccessor) {
 			return accessor;
 		}
-		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
+		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.blockEntity().getBlockPos()), Direction.UP, result.blockEntity().getBlockPos(), false);
 		/* off */
 		return client.blockAccessor()
-				.blockState(result.te().getBlockState())
-				.blockEntity(result.te())
+				.blockState(result.blockEntity().getBlockState())
+				.blockEntity(result.blockEntity())
 				.hit(trackHit)
 				.build();
 		/* on */

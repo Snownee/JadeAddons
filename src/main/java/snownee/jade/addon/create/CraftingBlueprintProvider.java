@@ -2,7 +2,7 @@ package snownee.jade.addon.create;
 
 import java.lang.reflect.Field;
 
-import com.simibubi.create.content.curiosities.tools.BlueprintOverlayRenderer;
+import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;

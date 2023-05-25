@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,7 @@ import snownee.jade.api.view.IClientExtensionProvider;
 import snownee.jade.api.view.IServerExtensionProvider;
 import snownee.jade.api.view.ViewGroup;
 
-public enum HideBoilerHandlerProvider implements IServerExtensionProvider<FluidTankTileEntity, CompoundTag>,
+public enum HideBoilerHandlerProvider implements IServerExtensionProvider<FluidTankBlockEntity, CompoundTag>,
 		IClientExtensionProvider<CompoundTag, FluidView> {
 	INSTANCE;
 
@@ -33,8 +33,8 @@ public enum HideBoilerHandlerProvider implements IServerExtensionProvider<FluidT
 	}
 
 	@Override
-	public @Nullable List<ViewGroup<CompoundTag>> getGroups(ServerPlayer player, ServerLevel level, FluidTankTileEntity target, boolean showDetails) {
-		if (target.getControllerTE() != null && target.getControllerTE().boiler.isActive()) {
+	public @Nullable List<ViewGroup<CompoundTag>> getGroups(ServerPlayer player, ServerLevel level, FluidTankBlockEntity target, boolean showDetails) {
+		if (target.getControllerBE() != null && target.getControllerBE().boiler.isActive()) {
 			return List.of();
 		}
 		return FluidStorageProvider.INSTANCE.getGroups(player, level, target, showDetails);

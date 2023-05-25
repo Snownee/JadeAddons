@@ -2,7 +2,7 @@ package snownee.jade.addon.create;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.content.curiosities.deco.PlacardTileEntity;
+import com.simibubi.create.content.decoration.placard.PlacardBlockEntity;
 
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.BlockAccessor;
@@ -17,7 +17,7 @@ public enum PlacardProvider implements IBlockComponentProvider {
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (accessor.getBlockEntity() instanceof PlacardTileEntity placard) {
+		if (accessor.getBlockEntity() instanceof PlacardBlockEntity placard) {
 			if (!placard.getHeldItem().isEmpty()) {
 				tooltip.add(placard.getHeldItem().getHoverName());
 			}
@@ -26,7 +26,7 @@ public enum PlacardProvider implements IBlockComponentProvider {
 
 	@Override
 	public @Nullable IElement getIcon(BlockAccessor accessor, IPluginConfig config, IElement currentIcon) {
-		if (accessor.getBlockEntity() instanceof PlacardTileEntity placard) {
+		if (accessor.getBlockEntity() instanceof PlacardBlockEntity placard) {
 			if (!placard.getHeldItem().isEmpty()) {
 				return IElementHelper.get().item(placard.getHeldItem());
 			}

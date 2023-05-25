@@ -91,18 +91,18 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
-    implementation fg.deobf("curse.maven:jei-238222:4354615")
-    implementation fg.deobf("curse.maven:jade-324717:4375714")
-    implementation fg.deobf("curse.maven:kiwi-303657:4036329")
+    implementation fg.deobf("curse.maven:jei-238222:4494410")
+    implementation fg.deobf("curse.maven:jade-324717:4433884")
+    implementation fg.deobf("curse.maven:kiwi-303657:4451128")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
-    implementation fg.deobf("curse.maven:curios-309927:3924518")
+    implementation fg.deobf("curse.maven:curios-309927:4523009")
     
     implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
     
     //implementation fg.deobf("curse.maven:mantle-74924:3829975")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
     
-    implementation fg.deobf("curse.maven:create-328085:4011414")
+    implementation fg.deobf("curse.maven:create-328085:4550987")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
     
     implementation fg.deobf("curse.maven:deep-resonance-233398:4373508")
@@ -115,7 +115,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
     //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
     
-    implementation fg.deobf("curse.maven:lootr-361276:4179721")
+    implementation fg.deobf("curse.maven:lootr-361276:4465109")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

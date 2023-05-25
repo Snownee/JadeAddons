@@ -3,17 +3,17 @@ package snownee.jade.addon.create;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.IDisplayAssemblyExceptions;
-import com.simibubi.create.content.contraptions.components.structureMovement.piston.MechanicalPistonBlock;
-import com.simibubi.create.content.contraptions.components.structureMovement.piston.PistonExtensionPoleBlock;
-import com.simibubi.create.content.contraptions.fluids.actors.ItemDrainTileEntity;
-import com.simibubi.create.content.contraptions.fluids.actors.SpoutTileEntity;
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
-import com.simibubi.create.content.contraptions.goggles.GogglesItem;
-import com.simibubi.create.content.contraptions.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.contraptions.goggles.IHaveHoveringInformation;
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.logistics.trains.entity.TrainRelocator;
+import com.simibubi.create.content.contraptions.IDisplayAssemblyExceptions;
+import com.simibubi.create.content.contraptions.piston.MechanicalPistonBlock;
+import com.simibubi.create.content.contraptions.piston.PistonExtensionPoleBlock;
+import com.simibubi.create.content.equipment.goggles.GogglesItem;
+import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
+import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
+import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.trains.entity.TrainRelocator;
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Iterate;
 import com.simibubi.create.foundation.utility.Lang;
@@ -79,10 +79,10 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 		/* off */
 		boolean hasGoggleInformation = te instanceof IHaveGoggleInformation
-				&& !(te instanceof SpoutTileEntity)
-				&& !(te instanceof ItemDrainTileEntity)
-				&& !(te instanceof BasinTileEntity)
-				&& (!(te instanceof FluidTankTileEntity tank) || (tank.getControllerTE() == null) || tank.getControllerTE().boiler.isActive());
+				&& !(te instanceof SpoutBlockEntity)
+				&& !(te instanceof ItemDrainBlockEntity)
+				&& !(te instanceof BasinBlockEntity)
+				&& (!(te instanceof FluidTankBlockEntity tank) || (tank.getControllerBE() == null) || tank.getControllerBE().boiler.isActive());
 		/* on */
 		boolean hasHoveringInformation = te instanceof IHaveHoveringInformation;
 
