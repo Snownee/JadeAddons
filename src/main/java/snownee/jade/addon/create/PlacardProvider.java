@@ -2,7 +2,7 @@ package snownee.jade.addon.create;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.content.curiosities.deco.PlacardTileEntity;
+import com.simibubi.create.content.decoration.placard.PlacardBlockEntity;
 
 import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IComponentProvider;
@@ -18,7 +18,7 @@ public enum PlacardProvider implements IComponentProvider {
 		if (!config.get(CreatePlugin.PLACARD)) {
 			return;
 		}
-		if (accessor.getBlockEntity() instanceof PlacardTileEntity placard) {
+		if (accessor.getBlockEntity() instanceof PlacardBlockEntity placard) {
 			if (!placard.getHeldItem().isEmpty()) {
 				tooltip.add(placard.getHeldItem().getHoverName());
 			}
@@ -27,7 +27,7 @@ public enum PlacardProvider implements IComponentProvider {
 
 	@Override
 	public @Nullable IElement getIcon(BlockAccessor accessor, IPluginConfig config, IElement currentIcon) {
-		if (config.get(CreatePlugin.PLACARD) && accessor.getBlockEntity() instanceof PlacardTileEntity placard) {
+		if (config.get(CreatePlugin.PLACARD) && accessor.getBlockEntity() instanceof PlacardBlockEntity placard) {
 			if (!placard.getHeldItem().isEmpty()) {
 				return CreatePlugin.client.getElementHelper().item(placard.getHeldItem());
 			}

@@ -2,7 +2,7 @@ package snownee.jade.addon.create;
 
 import java.lang.reflect.Field;
 
-import com.simibubi.create.content.curiosities.tools.BlueprintOverlayRenderer;
+import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
 
 import mcp.mobius.waila.api.EntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;

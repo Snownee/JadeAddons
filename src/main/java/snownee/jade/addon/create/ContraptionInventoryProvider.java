@@ -1,7 +1,7 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.contraptions.Contraption;
 
 import mcp.mobius.waila.api.EntityAccessor;
 import mcp.mobius.waila.api.IEntityComponentProvider;

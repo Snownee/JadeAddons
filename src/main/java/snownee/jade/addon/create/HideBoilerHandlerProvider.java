@@ -1,6 +1,6 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 
 import mcp.mobius.waila.api.IServerDataProvider;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +13,7 @@ public enum HideBoilerHandlerProvider implements IServerDataProvider<BlockEntity
 
 	@Override
 	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		FluidTankTileEntity tank = ((FluidTankTileEntity) blockEntity).getControllerTE();
+		FluidTankBlockEntity tank = ((FluidTankBlockEntity) blockEntity).getControllerBE();
 		if (tank == null) {
 			return;
 		}

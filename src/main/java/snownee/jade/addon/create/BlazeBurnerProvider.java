@@ -1,9 +1,9 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.contraptions.processing.BasinTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock.HeatLevel;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity.FuelType;
+import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock.HeatLevel;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity.FuelType;
 
 import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IComponentProvider;
@@ -35,7 +35,7 @@ public enum BlazeBurnerProvider implements IComponentProvider, IServerDataProvid
 		FuelType activeFuel = FuelType.NONE;
 		boolean isCreative = compound.getBoolean("isCreative");
 		if (isCreative) {
-			HeatLevel heatLevel = BasinTileEntity.getHeatLevelOf(accessor.getBlockState());
+			HeatLevel heatLevel = BasinBlockEntity.getHeatLevelOf(accessor.getBlockState());
 			if (heatLevel == HeatLevel.SEETHING) {
 				activeFuel = FuelType.SPECIAL;
 			} else if (heatLevel != HeatLevel.NONE) {
@@ -59,7 +59,7 @@ public enum BlazeBurnerProvider implements IComponentProvider, IServerDataProvid
 
 	@Override
 	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		BlazeBurnerTileEntity burner = (BlazeBurnerTileEntity) blockEntity;
+		BlazeBurnerBlockEntity burner = (BlazeBurnerBlockEntity) blockEntity;
 		if (burner.isCreative()) {
 			data.putBoolean("isCreative", true);
 		} else if (burner.getActiveFuel() != FuelType.NONE) {

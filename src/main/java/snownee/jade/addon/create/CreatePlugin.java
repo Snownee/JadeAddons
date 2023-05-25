@@ -1,14 +1,14 @@
 package snownee.jade.addon.create;
 
-import com.simibubi.create.content.contraptions.components.structureMovement.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.components.structureMovement.Contraption;
-import com.simibubi.create.content.contraptions.fluids.tank.FluidTankTileEntity;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.contraptions.processing.burner.BlazeBurnerTileEntity;
-import com.simibubi.create.content.curiosities.deco.PlacardBlock;
-import com.simibubi.create.content.curiosities.tools.BlueprintEntity;
-import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline;
-import com.simibubi.create.content.logistics.trains.track.TrackBlockOutline.BezierPointSelection;
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.simibubi.create.content.contraptions.Contraption;
+import com.simibubi.create.content.decoration.placard.PlacardBlock;
+import com.simibubi.create.content.equipment.blueprint.BlueprintEntity;
+import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import com.simibubi.create.content.trains.track.TrackBlockOutline;
+import com.simibubi.create.content.trains.track.TrackBlockOutline.BezierPointSelection;
 import com.simibubi.create.foundation.utility.RaycastHelper;
 import com.simibubi.create.foundation.utility.RaycastHelper.PredicateTraceResult;
 
@@ -54,8 +54,8 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.addConfig(BLAZE_BURNER, true);
 		registration.addConfig(CONTRAPTION_INVENTORY, true);
 		registration.addConfig(CONTRAPTION_EXACT_BLOCK, true);
-		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerTileEntity.class);
-		registration.registerBlockDataProvider(HideBoilerHandlerProvider.INSTANCE, FluidTankTileEntity.class);
+		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlockEntity.class);
+		registration.registerBlockDataProvider(HideBoilerHandlerProvider.INSTANCE, FluidTankBlockEntity.class);
 		registration.registerEntityDataProvider(ContraptionInventoryProvider.INSTANCE, AbstractContraptionEntity.class);
 	}
 
@@ -116,8 +116,8 @@ public class CreatePlugin implements IWailaPlugin {
 		if (accessor instanceof EntityAccessor) {
 			return;
 		}
-		BlockHitResult hitResult = new BlockHitResult(Vec3.atCenterOf(result.te().getBlockPos()), Direction.UP, result.te().getBlockPos(), false);
-		BlockAccessor newAccessor = client.createBlockAccessor(result.te().getBlockState(), result.te(), accessor.getLevel(), accessor.getPlayer(), accessor.getServerData(), hitResult, accessor.isServerConnected());
+		BlockHitResult hitResult = new BlockHitResult(Vec3.atCenterOf(result.blockEntity().getBlockPos()), Direction.UP, result.blockEntity().getBlockPos(), false);
+		BlockAccessor newAccessor = client.createBlockAccessor(result.blockEntity().getBlockState(), result.blockEntity(), accessor.getLevel(), accessor.getPlayer(), accessor.getServerData(), hitResult, accessor.isServerConnected());
 		event.setAccessor(newAccessor);
 	}
 
