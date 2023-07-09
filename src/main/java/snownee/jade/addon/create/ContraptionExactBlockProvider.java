@@ -2,14 +2,14 @@ package snownee.jade.addon.create;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import snownee.jade.addon.core.ObjectNameProvider;
+import snownee.jade.api.Accessor;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -18,60 +18,60 @@ import snownee.jade.api.TooltipPosition;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.config.IWailaConfig;
 import snownee.jade.api.ui.IElement;
+import snownee.jade.api.ui.IElement.Align;
 import snownee.jade.api.ui.IElementHelper;
+import snownee.jade.impl.ui.TextElement;
 
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
 
 	private long time = Long.MIN_VALUE;
-	private BlockState hitBlock;
-	private BlockHitResult hitResult;
+	private Accessor<?> accessor;
 
 	@Override
-	public @Nullable IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
+	public @Nullable IElement getIcon(EntityAccessor ignored, IPluginConfig config, IElement currentIcon) {
 		if (validate()) {
-			ItemStack stack = hitBlock.getCloneItemStack(hitResult, accessor.getLevel(), hitResult.getBlockPos(), accessor.getPlayer());
-			return IElementHelper.get().item(stack);
+			return CreatePlugin.client.getAccessorHandler(accessor.getAccessorType()).getIcon(accessor);
 		}
 		return null;
 	}
 
 	@Override
-	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+	public void appendTooltip(ITooltip tooltip, EntityAccessor ignored, IPluginConfig config) {
 		if (!validate()) {
 			return;
 		}
-		Component name = null;
-		if (CreatePlugin.client.shouldPick(hitBlock)) {
-			ItemStack pick = hitBlock.getCloneItemStack(hitResult, accessor.getLevel(), hitResult.getBlockPos(), accessor.getPlayer());
-			if (pick != null && !pick.isEmpty())
-				name = pick.getHoverName();
+		ITooltip dummy = IElementHelper.get().tooltip();
+		if (accessor instanceof BlockAccessor blockAccessor) {
+			ObjectNameProvider.INSTANCE.appendTooltip(dummy, blockAccessor, config);
+		} else if (accessor instanceof EntityAccessor entityAccessor) {
+			ObjectNameProvider.INSTANCE.appendTooltip(dummy, entityAccessor, config);
 		}
-		if (name == null) {
-			String key = hitBlock.getBlock().getDescriptionId();
-			if (I18n.exists(key)) {
-				name = hitBlock.getBlock().getName();
-			} else {
-				ItemStack pick = accessor.getPickedResult();
-				if (pick != null && !pick.isEmpty()) {
-					name = pick.getHoverName();
-				} else {
-					name = Component.literal(key);
+		if (!dummy.isEmpty()) {
+			// this is shitty... improve it one day
+			tooltip.remove(Identifiers.CORE_OBJECT_NAME);
+			tooltip.add(0, dummy.get(0, Align.LEFT).stream().map(e -> {
+				if (e instanceof TextElement text) {
+					e = IElementHelper.get().text(IWailaConfig.get().getFormatting().title(text.text.getString()).copy().withStyle(ChatFormatting.ITALIC));
 				}
-			}
+				return e.tag(Identifiers.CORE_OBJECT_NAME);
+			}).toList());
 		}
-		tooltip.remove(Identifiers.CORE_OBJECT_NAME);
-		tooltip.add(0, IWailaConfig.get().getFormatting().title(name).copy().withStyle(ChatFormatting.ITALIC), Identifiers.CORE_OBJECT_NAME);
 	}
 
-	public void setHit(BlockHitResult hitResult, BlockState hitBlock) {
-		this.hitResult = hitResult;
-		this.hitBlock = hitBlock;
+	public void setHit(Accessor<?> accessor) {
+		this.accessor = accessor;
 		time = Util.getMillis();
 	}
 
 	private boolean validate() {
-		return (Util.getMillis() - time) < 10;
+		if (accessor == null || (Util.getMillis() - time) > 10) {
+			return false;
+		}
+		if (accessor instanceof EntityAccessor entityAccessor && entityAccessor.getEntity() instanceof AbstractContraptionEntity) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override

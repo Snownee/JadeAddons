@@ -32,12 +32,15 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.api.Accessor;
+import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
+import snownee.jade.api.callback.JadeRayTraceCallback;
 import snownee.jade.api.config.IWailaConfig;
+import snownee.jade.impl.WailaClientRegistration;
 import snownee.jade.overlay.RayTracing;
 
 @WailaPlugin(CreatePlugin.ID)
@@ -110,8 +113,13 @@ public class CreatePlugin implements IWailaPlugin {
 				if (raytraceShape.isEmpty())
 					return false;
 				BlockHitResult rayTrace = raytraceShape.clip(localOrigin, localTarget, p);
-				if (rayTrace != null && rayTrace.getType() != Type.MISS) {
-					ContraptionExactBlockProvider.INSTANCE.setHit(rayTrace, state);
+				if (IWailaConfig.get().getPlugin().get(CONTRAPTION_EXACT_BLOCK) && rayTrace != null && rayTrace.getType() != Type.MISS) {
+					BlockAccessor originalAccessor = client.blockAccessor().blockState(state).hit(rayTrace).build();
+					Accessor<?> accessor = originalAccessor;
+					for (JadeRayTraceCallback callback : WailaClientRegistration.INSTANCE.rayTraceCallback.callbacks()) {
+						accessor = callback.onRayTrace(rayTrace, accessor, originalAccessor);
+					}
+					ContraptionExactBlockProvider.INSTANCE.setHit(accessor);
 				}
 				return rayTrace != null;
 			});
