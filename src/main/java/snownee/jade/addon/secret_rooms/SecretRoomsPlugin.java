@@ -1,4 +1,4 @@
-package snownee.jade.addon.secret_rooms;
+/*package snownee.jade.addon.secret_rooms;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -60,13 +60,14 @@ public class SecretRoomsPlugin implements IWailaPlugin {
 		}
 		if (mirror == null)
 			return accessor;
-		/* off */
+		 off 
 		return client.blockAccessor()
 				.blockState(mirror)
 				.blockEntity(null)
 				.hit(blockAccessor.getHitResult())
 				.build();
-		/* on */
+		 on 
 	}
 
 }
+*/

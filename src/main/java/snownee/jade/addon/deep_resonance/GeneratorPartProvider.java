@@ -5,22 +5,16 @@ import mcjty.deepresonance.modules.generator.data.GeneratorBlob;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
 		if (!accessor.getServerData().contains("DeepResonance")) {
 			return;
@@ -35,8 +29,8 @@ public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDat
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean showDetails) {
-		if (blockEntity instanceof GeneratorPartTileEntity part) {
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		if (accessor.getBlockEntity() instanceof GeneratorPartTileEntity part) {
 			CompoundTag tag = new CompoundTag();
 			tag.putInt("Id", part.getMultiblockId());
 			GeneratorBlob network = part.getBlob();

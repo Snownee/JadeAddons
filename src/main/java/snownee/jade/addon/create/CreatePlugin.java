@@ -105,7 +105,7 @@ public class CreatePlugin implements IWailaPlugin {
 				StructureBlockInfo blockInfo = contraption.getBlocks().get(p);
 				if (blockInfo == null)
 					return false;
-				BlockState state = blockInfo.state;
+				BlockState state = blockInfo.state();
 				VoxelShape raytraceShape = state.getShape(Minecraft.getInstance().level, BlockPos.ZERO);
 				if (raytraceShape.isEmpty())
 					return false;

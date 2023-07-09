@@ -7,10 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import snownee.jade.addon.JadeAddons;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -18,7 +15,7 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
@@ -31,8 +28,8 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		BacktankBlockEntity backtank = (BacktankBlockEntity) blockEntity;
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		BacktankBlockEntity backtank = (BacktankBlockEntity) accessor.getBlockEntity();
 		data.putInt("Air", backtank.getAirLevel());
 		for (Tag tag : backtank.getEnchantmentTag()) {
 			ResourceLocation id = EnchantmentHelper.getEnchantmentId((CompoundTag) tag);

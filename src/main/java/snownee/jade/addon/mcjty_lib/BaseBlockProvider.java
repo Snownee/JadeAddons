@@ -8,9 +8,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.api.BlockAccessor;
@@ -19,7 +16,7 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
@@ -44,17 +41,17 @@ public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataPro
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		if (!(blockEntity.getBlockState().getBlock() instanceof BaseBlock)) {
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		if (!(accessor.getBlock() instanceof BaseBlock)) {
 			return;
 		}
-		blockEntity.getCapability(CapabilityInfusable.INFUSABLE_CAPABILITY).ifPresent(h -> {
+		accessor.getBlockEntity().getCapability(CapabilityInfusable.INFUSABLE_CAPABILITY).ifPresent(h -> {
 			int infused = h.getInfused();
 			int pct = infused * 100 / GeneralConfig.maxInfuse.get();
 			data.putInt("Infused", pct);
 		});
 		if (GeneralConfig.manageOwnership.get()) {
-			GenericTileEntity generic = (GenericTileEntity) blockEntity;
+			GenericTileEntity generic = (GenericTileEntity) accessor.getBlockEntity();
 			if (generic.getOwnerName() != null && !generic.getOwnerName().isEmpty()) {
 				data.putInt("SecurityChannel", generic.getSecurityChannel());
 				data.putString("OwnerName", generic.getOwnerName());

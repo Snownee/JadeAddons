@@ -5,9 +5,6 @@ import java.util.UUID;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
 import noobanidus.mods.lootr.data.DataStorage;
 import snownee.jade.api.Accessor;
@@ -17,7 +14,7 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
@@ -26,8 +23,8 @@ public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataPro
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		if (blockEntity instanceof ILootBlockEntity tile) {
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		if (accessor.getBlockEntity() instanceof ILootBlockEntity tile) {
 			appendServerData(data, tile.getTileId());
 		}
 	}

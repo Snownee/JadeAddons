@@ -8,7 +8,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringB
 import com.simibubi.create.foundation.utility.Components;
 import com.simibubi.create.foundation.utility.Lang;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -46,7 +46,7 @@ public enum FilterProvider implements IBlockComponentProvider {
 		}
 		ItemStack filter = behaviour.getFilter(accessor.getSide());
 		if (filter != null && filter.getItem() instanceof FilterItem item) {
-			String key = Registry.ITEM.getKey(item).toString();
+			String key = BuiltInRegistries.ITEM.getKey(item).toString();
 			IElementHelper elements = IElementHelper.get();
 			ITooltip tooltip2 = elements.tooltip();
 			if ("create:filter".equals(key)) {

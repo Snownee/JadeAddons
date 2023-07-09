@@ -7,9 +7,6 @@ import mcjty.deepresonance.modules.core.block.ResonatingCrystalTileEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.api.BlockAccessor;
@@ -18,7 +15,7 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum CrystalProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum CrystalProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
@@ -40,8 +37,8 @@ public enum CrystalProvider implements IBlockComponentProvider, IServerDataProvi
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean showDetails) {
-		if (blockEntity instanceof ResonatingCrystalTileEntity crystal) {
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		if (accessor.getBlockEntity() instanceof ResonatingCrystalTileEntity crystal) {
 			CompoundTag tag = new CompoundTag();
 			tag.putDouble("Strength", crystal.getStrength());
 			tag.putDouble("Efficiency", crystal.getEfficiency());

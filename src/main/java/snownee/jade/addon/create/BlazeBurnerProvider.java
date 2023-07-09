@@ -8,11 +8,8 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity.Fuel
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import snownee.jade.api.BlockAccessor;
@@ -22,7 +19,7 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.IElementHelper;
 
-public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity> {
+public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
 
 	@Override
@@ -54,8 +51,8 @@ public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataP
 	}
 
 	@Override
-	public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean details) {
-		BlazeBurnerBlockEntity burner = (BlazeBurnerBlockEntity) blockEntity;
+	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+		BlazeBurnerBlockEntity burner = (BlazeBurnerBlockEntity) accessor.getBlockEntity();
 		if (burner.isCreative()) {
 			data.putBoolean("isCreative", true);
 		} else if (burner.getActiveFuel() != FuelType.NONE) {

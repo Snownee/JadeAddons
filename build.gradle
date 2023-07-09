@@ -29,7 +29,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: minecraft_version
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -91,31 +91,31 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
-    implementation fg.deobf("curse.maven:jei-238222:4494410")
-    implementation fg.deobf("curse.maven:jade-324717:4433884")
-    implementation fg.deobf("curse.maven:kiwi-303657:4451128")
+    implementation fg.deobf("curse.maven:jei-238222:4609866")
+    implementation fg.deobf("curse.maven:jade-324717:4614153")
+    implementation fg.deobf("curse.maven:kiwi-303657:4592974")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
-    implementation fg.deobf("curse.maven:curios-309927:4523009")
+    implementation fg.deobf("curse.maven:curios-309927:4583413")
     
-    implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
+    //implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
     
     //implementation fg.deobf("curse.maven:mantle-74924:3829975")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
     
-    implementation fg.deobf("curse.maven:create-328085:4550987")
+    implementation fg.deobf("curse.maven:create-328085:4626108s")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
     
-    implementation fg.deobf("curse.maven:deep-resonance-233398:4373508")
-    implementation fg.deobf("curse.maven:rftools-base-326041:4373507")
-    implementation fg.deobf("curse.maven:mcjtylib-233105:4372084")
+    implementation fg.deobf("curse.maven:deep-resonance-233398:4598264")
+    implementation fg.deobf("curse.maven:rftools-base-326041:4598236")
+    implementation fg.deobf("curse.maven:mcjtylib-233105:4598235")
     
-    implementation fg.deobf("curse.maven:the-one-probe-245211:3965693")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
     
     //implementation fg.deobf("curse.maven:thermal-expansion-69163:3837868")
     //implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
     //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
     
-    implementation fg.deobf("curse.maven:lootr-361276:4465109")
+    implementation fg.deobf("curse.maven:lootr-361276:4608503")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..

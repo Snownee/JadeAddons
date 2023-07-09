@@ -16,6 +16,7 @@ import snownee.jade.api.view.FluidView;
 import snownee.jade.api.view.IClientExtensionProvider;
 import snownee.jade.api.view.IServerExtensionProvider;
 import snownee.jade.api.view.ViewGroup;
+import snownee.jade.util.JadeForgeUtils;
 
 public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<AbstractContraptionEntity, CompoundTag>,
 		IClientExtensionProvider<CompoundTag, FluidView> {
@@ -28,13 +29,13 @@ public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<
 
 	@Override
 	public List<ClientViewGroup<FluidView>> getClientGroups(Accessor<?> accessor, List<ViewGroup<CompoundTag>> groups) {
-		return ClientViewGroup.map(groups, FluidView::read, null);
+		return ClientViewGroup.map(groups, FluidView::readDefault, null);
 	}
 
 	@Override
 	public List<ViewGroup<CompoundTag>> getGroups(ServerPlayer player, ServerLevel level, AbstractContraptionEntity entity, boolean showDetails) {
 		Contraption contraption = entity.getContraption();
-		return FluidView.fromFluidHandler(contraption.getSharedFluidTanks());
+		return JadeForgeUtils.fromFluidHandler(contraption.getSharedFluidTanks());
 	}
 
 }

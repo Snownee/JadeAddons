@@ -20,7 +20,7 @@ import com.simibubi.create.foundation.utility.Lang;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.LiteralContents;
@@ -46,7 +46,7 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 	@SuppressWarnings("deprecation")
 	private static Block block(String id) {
-		return Registry.BLOCK.get(new ResourceLocation(CreatePlugin.ID, id));
+		return BuiltInRegistries.BLOCK.get(new ResourceLocation(CreatePlugin.ID, id));
 	}
 
 	private final Block PISTON_EXTENSION_POLE = block("piston_extension_pole");

@@ -24,7 +24,7 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider {
 			RESULT = BlueprintOverlayRenderer.class.getDeclaredField("result");
 			RESULT.setAccessible(true);
 		} catch (Throwable e) {
-			JadeAddons.LOGGER.catching(e);
+			JadeAddons.LOGGER.trace("Error accessing blueprint result field", e);
 			RESULT = null;
 		}
 	}
@@ -51,8 +51,7 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider {
 			try {
 				return (ItemStack) RESULT.get(null);
 			} catch (Throwable e) {
-				JadeAddons.LOGGER.catching(e);
-				e.printStackTrace();
+				JadeAddons.LOGGER.trace("Error getting blueprint result", e);
 			}
 		}
 		return ItemStack.EMPTY;
