@@ -116,6 +116,8 @@ dependencies {
     //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
     
     implementation fg.deobf("curse.maven:lootr-361276:4608503")
+    
+    implementation fg.deobf("curse.maven:ender-io-64578:4637542")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
