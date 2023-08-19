@@ -173,4 +173,9 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 	}
 
+	@Override
+	public boolean enabledByDefault() {
+		return false;
+	}
+
 }
