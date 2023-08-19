@@ -91,16 +91,18 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerFluidStorageClient(HideBoilerHandlerProvider.INSTANCE);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
-			if (!(e instanceof AbstractContraptionEntity)) {
+			if (!(e instanceof AbstractContraptionEntity contraptionEntity)) {
 				return true;
 			}
 			Minecraft mc = Minecraft.getInstance();
 			Entity camera = mc.getCameraEntity();
+			if (camera == null) {
+				return true;
+			}
 			Vec3 origin = camera.getEyePosition(mc.getFrameTime());
 			Vec3 lookVector = camera.getViewVector(mc.getFrameTime());
 			float reach = mc.gameMode.getPickRange() + IWailaConfig.get().getGeneral().getReachDistance();
 			Vec3 target = origin.add(lookVector.x * reach, lookVector.y * reach, lookVector.z * reach);
-			AbstractContraptionEntity contraptionEntity = (AbstractContraptionEntity) e;
 			Vec3 localOrigin = contraptionEntity.toLocalVector(origin, 1);
 			Vec3 localTarget = contraptionEntity.toLocalVector(target, 1);
 			Contraption contraption = contraptionEntity.getContraption();
@@ -119,7 +121,9 @@ public class CreatePlugin implements IWailaPlugin {
 					for (JadeRayTraceCallback callback : WailaClientRegistration.INSTANCE.rayTraceCallback.callbacks()) {
 						accessor = callback.onRayTrace(rayTrace, accessor, originalAccessor);
 					}
-					ContraptionExactBlockProvider.INSTANCE.setHit(accessor);
+					if (accessor != null) {
+						ContraptionExactBlockProvider.INSTANCE.setHit(contraptionEntity, accessor);
+					}
 				}
 				return rayTrace != null;
 			});

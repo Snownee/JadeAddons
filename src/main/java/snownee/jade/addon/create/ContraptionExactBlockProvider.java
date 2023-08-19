@@ -1,12 +1,15 @@
 package snownee.jade.addon.create;
 
+import java.util.concurrent.TimeUnit;
+
 import org.jetbrains.annotations.Nullable;
 
-import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import snownee.jade.addon.core.ObjectNameProvider;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
@@ -25,26 +28,27 @@ import snownee.jade.impl.ui.TextElement;
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
 
-	private long time = Long.MIN_VALUE;
-	private Accessor<?> accessor;
+	private final Cache<Entity, Accessor<?>> accessorCache = CacheBuilder.newBuilder().weakKeys().expireAfterAccess(100, TimeUnit.MILLISECONDS).build();
 
 	@Override
-	public @Nullable IElement getIcon(EntityAccessor ignored, IPluginConfig config, IElement currentIcon) {
-		if (validate()) {
-			return CreatePlugin.client.getAccessorHandler(accessor.getAccessorType()).getIcon(accessor);
+	public @Nullable IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
+		Accessor<?> exact = accessorCache.getIfPresent(accessor.getEntity());
+		if (exact == null) {
+			return null;
 		}
-		return null;
+		return CreatePlugin.client.getAccessorHandler(exact.getAccessorType()).getIcon(exact);
 	}
 
 	@Override
-	public void appendTooltip(ITooltip tooltip, EntityAccessor ignored, IPluginConfig config) {
-		if (!validate()) {
+	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
+		Accessor<?> exact = accessorCache.getIfPresent(accessor.getEntity());
+		if (exact == null) {
 			return;
 		}
 		ITooltip dummy = IElementHelper.get().tooltip();
-		if (accessor instanceof BlockAccessor blockAccessor) {
+		if (exact instanceof BlockAccessor blockAccessor) {
 			ObjectNameProvider.INSTANCE.appendTooltip(dummy, blockAccessor, config);
-		} else if (accessor instanceof EntityAccessor entityAccessor) {
+		} else if (exact instanceof EntityAccessor entityAccessor) {
 			ObjectNameProvider.INSTANCE.appendTooltip(dummy, entityAccessor, config);
 		}
 		if (!dummy.isEmpty()) {
@@ -59,19 +63,8 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 		}
 	}
 
-	public void setHit(Accessor<?> accessor) {
-		this.accessor = accessor;
-		time = Util.getMillis();
-	}
-
-	private boolean validate() {
-		if (accessor == null || (Util.getMillis() - time) > 10) {
-			return false;
-		}
-		if (accessor instanceof EntityAccessor entityAccessor && entityAccessor.getEntity() instanceof AbstractContraptionEntity) {
-			return false;
-		}
-		return true;
+	public void setHit(Entity entity, Accessor<?> accessor) {
+		accessorCache.put(entity, accessor);
 	}
 
 	@Override
