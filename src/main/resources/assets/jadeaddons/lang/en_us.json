@@ -31,8 +31,8 @@
 "jadeaddons.deepresonance.collectors": "Collectors: %s",
 "jadeaddons.deepresonance.generators": "Generators: %s",
 
-"jadeaddons.lootr.decay": "Decay in: %ss",
-"jadeaddons.lootr.refresh": "Refresh in: %ss",
+"jadeaddons.lootr.decay": "Decay in: %s",
+"jadeaddons.lootr.refresh": "Refresh in: %s",
 "jadeaddons.lootr.refreshed": "Refreshed!",
 
 "entity.tconstruct.glow_ball": "Glowball",

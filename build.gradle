@@ -79,6 +79,7 @@ repositories {
     maven {
         url = "https://www.cursemaven.com"
     }
+    maven { url "https://api.modrinth.com/maven" }
     flatDir {
         dir 'libs'
     }
@@ -92,7 +93,7 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
     implementation fg.deobf("curse.maven:jei-238222:4609866")
-    implementation fg.deobf("curse.maven:jade-324717:4614153")
+    implementation fg.deobf("maven.modrinth:jade:2iRQrBk4")
     implementation fg.deobf("curse.maven:kiwi-303657:4592974")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     implementation fg.deobf("curse.maven:curios-309927:4583413")

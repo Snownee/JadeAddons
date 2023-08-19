@@ -11,6 +11,7 @@ import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.ui.IDisplayHelper;
 import snownee.jade.api.ui.IElement;
 import snownee.jade.api.ui.IElementHelper;
 
@@ -33,7 +34,7 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider {
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
 		ItemStack result = getResult();
 		if (!result.isEmpty()) {
-			tooltip.add(result.getHoverName());
+			tooltip.add(IDisplayHelper.get().stripColor(result.getHoverName()));
 		}
 	}
 

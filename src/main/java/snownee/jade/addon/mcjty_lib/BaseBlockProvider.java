@@ -4,7 +4,6 @@ import mcjty.lib.api.infusable.CapabilityInfusable;
 import mcjty.lib.base.GeneralConfig;
 import mcjty.lib.blocks.BaseBlock;
 import mcjty.lib.tileentity.GenericTileEntity;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -15,6 +14,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.theme.IThemeHelper;
 
 public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
@@ -23,8 +23,9 @@ public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataPro
 	@OnlyIn(Dist.CLIENT)
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
 		CompoundTag data = accessor.getServerData();
+		IThemeHelper t = IThemeHelper.get();
 		if (data.contains("Infused")) {
-			tooltip.add(Component.translatable("jadeaddons.mcjtylib.infused", data.getInt("Infused")));
+			tooltip.add(Component.translatable("jadeaddons.mcjtylib.infused", t.info(data.getInt("Infused"))));
 		}
 		if (data.contains("SecurityChannel")) {
 			int channel = data.getInt("SecurityChannel");
@@ -35,7 +36,7 @@ public enum BaseBlockProvider implements IBlockComponentProvider, IServerDataPro
 				tooltip.add(Component.translatable("jadeaddons.mcjtylib.ownedBy.withChannel", name, channel));
 			}
 			if (data.getBoolean("OwnerWarning")) {
-				tooltip.add(Component.translatable("jadeaddons.mcjtylib.ownedBy.warning").withStyle(ChatFormatting.RED));
+				tooltip.add(t.warning(Component.translatable("jadeaddons.mcjtylib.ownedBy.warning")));
 			}
 		}
 	}

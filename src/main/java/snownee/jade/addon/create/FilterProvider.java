@@ -90,8 +90,6 @@ public enum FilterProvider implements IBlockComponentProvider {
 			}
 			if (!tooltip2.isEmpty()) {
 				var style = new BoxStyle();
-				style.borderColor = 0x88000000;
-				style.bgColor = 0x88000000;
 				style.borderWidth = 0.75F;
 				var box = elements.box(tooltip2, style);
 				box.getTooltipRenderer().setPadding(ITooltipRenderer.TOP, 2);

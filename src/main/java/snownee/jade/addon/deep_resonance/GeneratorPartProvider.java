@@ -10,6 +10,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.theme.IThemeHelper;
 
 public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
@@ -19,13 +20,14 @@ public enum GeneratorPartProvider implements IBlockComponentProvider, IServerDat
 		if (!accessor.getServerData().contains("DeepResonance")) {
 			return;
 		}
+		IThemeHelper t = IThemeHelper.get();
 		CompoundTag tag = accessor.getServerData().getCompound("DeepResonance");
 		int id = tag.getInt("Id");
 		int collectors = tag.getInt("Collectors");
 		int generators = tag.getInt("Generators");
-		tooltip.add(Component.translatable("jadeaddons.deepresonance.id", id));
-		tooltip.add(Component.translatable("jadeaddons.deepresonance.collectors", collectors));
-		tooltip.add(Component.translatable("jadeaddons.deepresonance.generators", generators));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.id", t.info(id)));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.collectors", t.info(collectors)));
+		tooltip.add(Component.translatable("jadeaddons.deepresonance.generators", t.info(generators)));
 	}
 
 	@Override

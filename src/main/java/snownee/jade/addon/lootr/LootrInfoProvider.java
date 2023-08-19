@@ -13,6 +13,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.theme.IThemeHelper;
 
 public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
@@ -32,15 +33,16 @@ public enum LootrInfoProvider implements IBlockComponentProvider, IServerDataPro
 	public static void appendTooltip(ITooltip tooltip, Accessor<?> accessor) {
 		CompoundTag data = accessor.getServerData();
 		int decayValue = data.getInt("LootrDecay");
+		IThemeHelper t = IThemeHelper.get();
 		if (decayValue > 0) {
-			tooltip.add(Component.translatable("jadeaddons.lootr.decay", decayValue / 20));
+			tooltip.add(Component.translatable("jadeaddons.lootr.decay", t.seconds(decayValue)));
 		}
 		if (data.getBoolean("LootrRefreshed")) {
 			tooltip.add(Component.translatable("jadeaddons.lootr.refreshed"));
 		} else {
 			int refreshValue = data.getInt("LootrRefresh");
 			if (refreshValue > 0) {
-				tooltip.add(Component.translatable("jadeaddons.lootr.refresh", refreshValue / 20));
+				tooltip.add(Component.translatable("jadeaddons.lootr.refresh", t.seconds(refreshValue)));
 			}
 		}
 	}

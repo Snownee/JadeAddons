@@ -17,6 +17,7 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.IElementHelper;
 
 public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
@@ -44,9 +45,9 @@ public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataP
 		ItemStack item = new ItemStack(activeFuel == FuelType.SPECIAL ? Items.SOUL_CAMPFIRE : Items.CAMPFIRE);
 		tooltip.add(IElementHelper.get().smallItem(item));
 		if (isCreative) {
-			tooltip.append(Component.translatable("jade.infinity"));
+			tooltip.append(IThemeHelper.get().info(Component.translatable("jade.infinity")));
 		} else {
-			tooltip.append(Component.translatable("jade.seconds", compound.getInt("burnTimeRemaining") / 20));
+			tooltip.append(IThemeHelper.get().seconds(compound.getInt("burnTimeRemaining")));
 		}
 	}
 

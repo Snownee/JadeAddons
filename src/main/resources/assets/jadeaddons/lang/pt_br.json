@@ -24,8 +24,8 @@
 "jadeaddons.deepresonance.collectors": "Colecionadores: %s",
 "jadeaddons.deepresonance.generators": "Geradores: %s",
 
-"jadeaddons.lootr.decay": "Decadência em: %ss",
-"jadeaddons.lootr.refresh": "Atualizar em: %ss",
+"jadeaddons.lootr.decay": "Decadência em: %s",
+"jadeaddons.lootr.refresh": "Atualizar em: %s",
 "jadeaddons.lootr.refreshed": "Atualizado!",
 
 "jadeaddons.pair": "%s: %s",

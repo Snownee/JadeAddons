@@ -16,7 +16,7 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.Identifiers;
 import snownee.jade.api.TooltipPosition;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.config.IWailaConfig;
+import snownee.jade.api.theme.IThemeHelper;
 import snownee.jade.api.ui.IElement;
 import snownee.jade.api.ui.IElement.Align;
 import snownee.jade.api.ui.IElementHelper;
@@ -52,7 +52,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 			tooltip.remove(Identifiers.CORE_OBJECT_NAME);
 			tooltip.add(0, dummy.get(0, Align.LEFT).stream().map(e -> {
 				if (e instanceof TextElement text) {
-					e = IElementHelper.get().text(IWailaConfig.get().getFormatting().title(text.text.getString()).copy().withStyle(ChatFormatting.ITALIC));
+					e = IElementHelper.get().text(IThemeHelper.get().title(text.text.getString()).copy().withStyle(ChatFormatting.ITALIC));
 				}
 				return e.tag(Identifiers.CORE_OBJECT_NAME);
 			}).toList());

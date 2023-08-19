@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringUtil;
 import net.minecraftforge.fml.IExtensionPoint;
@@ -13,6 +12,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.network.NetworkConstants;
+import snownee.jade.api.theme.IThemeHelper;
 
 @Mod(JadeAddons.ID)
 public class JadeAddons {
@@ -28,6 +28,6 @@ public class JadeAddons {
 	}
 
 	public static MutableComponent seconds(int sec) {
-		return Component.literal(StringUtil.formatTickDuration(sec * 20)).withStyle(ChatFormatting.WHITE);
+		return IThemeHelper.get().info(StringUtil.formatTickDuration(sec * 20)).withStyle(ChatFormatting.WHITE);
 	}
 }
