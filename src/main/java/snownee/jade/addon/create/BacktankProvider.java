@@ -42,7 +42,7 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 
 	@Override
 	public ResourceLocation getUid() {
-		return CreatePlugin.COPPER_BACKTANK;
+		return CreatePlugin.BACKTANK_CAPACITY;
 	}
 
 }
