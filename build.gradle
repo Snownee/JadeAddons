@@ -93,7 +93,7 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
     
     implementation fg.deobf("curse.maven:jei-238222:4609866")
-    implementation fg.deobf("maven.modrinth:jade:2iRQrBk4")
+    implementation fg.deobf("maven.modrinth:jade:5gvujWrb")
     implementation fg.deobf("curse.maven:kiwi-303657:4592974")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     implementation fg.deobf("curse.maven:curios-309927:4583413")
@@ -103,7 +103,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:mantle-74924:3829975")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
     
-    implementation fg.deobf("curse.maven:create-328085:4626108s")
+    implementation fg.deobf("curse.maven:create-328085:4835191")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
     
     implementation fg.deobf("curse.maven:deep-resonance-233398:4598264")
