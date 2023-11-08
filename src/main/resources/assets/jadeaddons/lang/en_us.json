@@ -7,7 +7,7 @@
 "config.jade.plugin_create.placard": "Placard",
 "config.jade.plugin_create.exact_block": "Contraption Exact Block",
 "config.jade.plugin_create.filter": "Filter",
-"config.jade.plugin_create.copper_backtank": "Copper Backtank",
+"config.jade.plugin_create.backtank_capacity": "Backtank Capacity",
 "config.jade.plugin_create.goggles": "Integrate Goggles",
 "config.jade.plugin_create.goggles.requires_goggles": "Requires Goggles",
 "config.jade.plugin_create.goggles.detailed": "Detailed-Only",
