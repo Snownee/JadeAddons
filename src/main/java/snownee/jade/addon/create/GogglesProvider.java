@@ -6,6 +6,7 @@ import java.util.List;
 import com.simibubi.create.content.contraptions.IDisplayAssemblyExceptions;
 import com.simibubi.create.content.contraptions.piston.MechanicalPistonBlock;
 import com.simibubi.create.content.contraptions.piston.PistonExtensionPoleBlock;
+import com.simibubi.create.content.equipment.goggles.GoggleOverlayRenderer;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
 import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
@@ -72,8 +73,8 @@ public class GogglesProvider implements IBlockComponentProvider {
 			return;
 		}
 		Level world = accessor.getLevel();
-		BlockPos pos = accessor.getPosition();
-		BlockEntity te = accessor.getBlockEntity();
+		BlockPos pos = GoggleOverlayRenderer.proxiedOverlayPosition(world, accessor.getPosition());
+		BlockEntity te = world.getBlockEntity(pos);
 
 		boolean wearingGoggles = !config.get(CreatePlugin.REQUIRES_GOGGLES) || GogglesItem.isWearingGoggles(accessor.getPlayer());
 
@@ -132,7 +133,7 @@ public class GogglesProvider implements IBlockComponentProvider {
 		});
 
 		// check for piston poles if goggles are worn
-		BlockState state = accessor.getBlockState();
+		BlockState state = world.getBlockState(pos);
 		if (wearingGoggles && state.is(PISTON_EXTENSION_POLE)) {
 			Direction[] directions = Iterate.directionsInAxis(state.getValue(DirectionalBlock.FACING).getAxis());
 			int poles = 1;
