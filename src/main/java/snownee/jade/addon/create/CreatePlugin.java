@@ -21,6 +21,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
@@ -89,6 +90,8 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(HideBoilerHandlerProvider.INSTANCE);
+
+		EntityType.byString("create:super_glue").ifPresent(registration::hideTarget);
 
 		RayTracing.ENTITY_FILTER = RayTracing.ENTITY_FILTER.and(e -> {
 			if (!(e instanceof AbstractContraptionEntity contraptionEntity)) {
