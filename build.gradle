@@ -91,34 +91,35 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
-    
+
     implementation fg.deobf("curse.maven:jei-238222:4609866")
-    implementation fg.deobf("maven.modrinth:jade:5gvujWrb")
+    implementation fg.deobf("maven.modrinth:jade:11.9.4+forge")
     implementation fg.deobf("curse.maven:kiwi-303657:4592974")
     //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
     implementation fg.deobf("curse.maven:curios-309927:4583413")
-    
+
     //implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
-    
+
     //implementation fg.deobf("curse.maven:mantle-74924:3829975")
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
-    
+
+    //https://www.curseforge.com/minecraft/mc-mods/create/files/all?page=1&pageSize=20
     implementation fg.deobf("curse.maven:create-328085:4835191")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
-    
+
     implementation fg.deobf("curse.maven:deep-resonance-233398:4598264")
     implementation fg.deobf("curse.maven:rftools-base-326041:4598236")
     implementation fg.deobf("curse.maven:mcjtylib-233105:4598235")
-    
+
     implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
-    
+
     //implementation fg.deobf("curse.maven:thermal-expansion-69163:3837868")
     //implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
     //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
-    
-    implementation fg.deobf("curse.maven:lootr-361276:4608503")
-    
-    implementation fg.deobf("curse.maven:ender-io-64578:4637542")
+
+    implementation fg.deobf("curse.maven:lootr-361276:5420132")
+
+    implementation fg.deobf("curse.maven:ender-io-64578:5549669")
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
