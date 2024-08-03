@@ -39,13 +39,11 @@ import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 import snownee.jade.api.callback.JadeRayTraceCallback;
 import snownee.jade.api.config.IWailaConfig;
 import snownee.jade.impl.WailaClientRegistration;
 import snownee.jade.overlay.RayTracing;
 
-@WailaPlugin(CreatePlugin.ID)
 public class CreatePlugin implements IWailaPlugin {
 	public static final String ID = "create";
 	public static final ResourceLocation CRAFTING_BLUEPRINT = new ResourceLocation(ID, "crafting_blueprint");
