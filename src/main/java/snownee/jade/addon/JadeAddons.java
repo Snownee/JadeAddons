@@ -21,7 +21,9 @@ public class JadeAddons {
 	public static final Logger LOGGER = LogUtils.getLogger();
 
 	public JadeAddons() {
-		ModLoadingContext.get().registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+		ModLoadingContext.get().registerExtensionPoint(
+				IExtensionPoint.DisplayTest.class,
+				() -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
 		if (FMLEnvironment.dist.isClient()) {
 			JadeAddonsClient.init();
 		}

@@ -32,7 +32,11 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<A
 	}
 
 	@Override
-	public List<ViewGroup<ItemStack>> getGroups(ServerPlayer player, ServerLevel level, AbstractContraptionEntity entity, boolean showDetails) {
+	public List<ViewGroup<ItemStack>> getGroups(
+			ServerPlayer player,
+			ServerLevel level,
+			AbstractContraptionEntity entity,
+			boolean showDetails) {
 		Contraption contraption = entity.getContraption();
 		return List.of(JadeForgeUtils.fromItemHandler(contraption.getSharedInventory(), 54, 0));
 	}

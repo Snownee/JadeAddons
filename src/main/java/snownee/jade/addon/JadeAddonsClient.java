@@ -6,6 +6,8 @@ import snownee.jade.gui.PluginsConfigScreen;
 
 public class JadeAddonsClient {
 	public static void init() {
-		ModLoadingContext.get().registerExtensionPoint(ConfigScreenFactory.class, () -> new ConfigScreenFactory((minecraft, screen) -> new PluginsConfigScreen(screen)));
+		ModLoadingContext.get().registerExtensionPoint(
+				ConfigScreenFactory.class,
+				() -> new ConfigScreenFactory((minecraft, screen) -> new PluginsConfigScreen(screen)));
 	}
 }

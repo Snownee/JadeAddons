@@ -1,21 +1,21 @@
-modLoader="javafml"
-loaderVersion="[46,)"
-license="ARR"
+modLoader = "javafml"
+loaderVersion = "[46,)"
+license = "ARR"
 
 [[mods]]
-modId="jadeaddons"
-version="${file.jarVersion}"
-displayName="Jade Addons"
-authors="Snownee"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/jade-addons"
-description="Jade additional mod supports"
+modId = "jadeaddons"
+version = "${file.jarVersion}"
+displayName = "Jade Addons"
+authors = "Snownee"
+displayURL = "https://www.curseforge.com/minecraft/mc-mods/jade-addons"
+description = "Jade additional mod supports"
 
 [[dependencies.jadeaddons]]
-    modId="jade"
-    mandatory=true
-    versionRange="[11.5.1, )"
-    ordering="NONE"
-    side="BOTH"
+modId = "jade"
+mandatory = true
+versionRange = "[11.5.1, )"
+ordering = "NONE"
+side = "BOTH"
 
 [modproperties.jadeaddons]
-    catalogueItemIcon="minecraft:spyglass" #Support for Catalogue mod
+catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod

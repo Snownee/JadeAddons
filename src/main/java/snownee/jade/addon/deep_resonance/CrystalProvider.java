@@ -32,7 +32,11 @@ public enum CrystalProvider implements IBlockComponentProvider, IServerDataProvi
 		double power = tag.getDouble("Power");
 		DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		decimalFormat.setRoundingMode(RoundingMode.DOWN);
-		tooltip.add(Component.translatable("jadeaddons.deepresonance.sep", decimalFormat.format(strength), decimalFormat.format(efficiency), decimalFormat.format(purity)));
+		tooltip.add(Component.translatable(
+				"jadeaddons.deepresonance.sep",
+				decimalFormat.format(strength),
+				decimalFormat.format(efficiency),
+				decimalFormat.format(purity)));
 		tooltip.add(Component.translatable("jadeaddons.deepresonance.crystalPower", decimalFormat.format(power), rfpertick));
 	}
 

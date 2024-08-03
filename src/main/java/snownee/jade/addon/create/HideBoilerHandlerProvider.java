@@ -33,7 +33,11 @@ public enum HideBoilerHandlerProvider implements IServerExtensionProvider<FluidT
 	}
 
 	@Override
-	public @Nullable List<ViewGroup<CompoundTag>> getGroups(ServerPlayer player, ServerLevel level, FluidTankBlockEntity target, boolean showDetails) {
+	public @Nullable List<ViewGroup<CompoundTag>> getGroups(
+			ServerPlayer player,
+			ServerLevel level,
+			FluidTankBlockEntity target,
+			boolean showDetails) {
 		if (target.getControllerBE() != null && target.getControllerBE().boiler.isActive()) {
 			return List.of();
 		}

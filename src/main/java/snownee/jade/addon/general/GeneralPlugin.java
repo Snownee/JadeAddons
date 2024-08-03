@@ -45,7 +45,8 @@ public class GeneralPlugin implements IWailaPlugin {
 		//		registration.addConfig(DETAILS_EQUIPMENT_REQUIREMENT, "", ResourceLocation::isValidResourceLocation);
 		registration.addConfigListener(EQUIPMENT_REQUIREMENT, id -> refreshTag(id, $ -> requirementTag = $));
 		//		registration.addConfigListener(DETAILS_EQUIPMENT_REQUIREMENT, id -> refreshTag(id, $ -> requirementDetailsTag = $));
-		registration.addRayTraceCallback(10000,
+		registration.addRayTraceCallback(
+				10000,
 				(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) -> {
 					if (accessor != null) {
 						Player player = accessor.getPlayer();
@@ -67,7 +68,9 @@ public class GeneralPlugin implements IWailaPlugin {
 
 		if (ModList.get().isLoaded("curios")) {
 			/* off */
-			EQUIPMENT_CHECK_PREDICATE = EQUIPMENT_CHECK_PREDICATE.or((player, tag) -> CuriosApi.getCuriosHelper().findCurios(player, SlotTypePreset.HEAD.getIdentifier())
+			EQUIPMENT_CHECK_PREDICATE = EQUIPMENT_CHECK_PREDICATE.or((player, tag) -> CuriosApi.getCuriosHelper().findCurios(
+							player,
+							SlotTypePreset.HEAD.getIdentifier())
 					.stream()
 					.filter(result -> !result.slotContext().cosmetic()).anyMatch(result -> result.stack().is(tag)));
 			/* on */

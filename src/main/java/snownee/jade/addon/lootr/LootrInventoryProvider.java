@@ -39,7 +39,13 @@ public enum LootrInventoryProvider
 		if (target instanceof ILootBlockEntity tile) {
 			if (tile.getOpeners().contains(player.getUUID())) {
 				UUID id = tile.getTileId();
-				SpecialChestInventory inv = DataStorage.getInventory(level, id, tile.getPosition(), player, (RandomizableContainerBlockEntity) tile, tile::unpackLootTable);
+				SpecialChestInventory inv = DataStorage.getInventory(
+						level,
+						id,
+						tile.getPosition(),
+						player,
+						(RandomizableContainerBlockEntity) tile,
+						tile::unpackLootTable);
 				if (inv != null) {
 					return List.of(ItemView.fromContainer(inv, 54, 0));
 				}

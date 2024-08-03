@@ -23,7 +23,10 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 		CompoundTag data = accessor.getServerData();
 		if (data.contains("Air")) {
 			int maxair = BacktankUtil.maxAir(data.getInt("Capacity"));
-			tooltip.add(Component.translatable("jadeaddons.create.backtank_air", JadeAddons.seconds(data.getInt("Air")), JadeAddons.seconds(maxair)));
+			tooltip.add(Component.translatable(
+					"jadeaddons.create.backtank_air",
+					JadeAddons.seconds(data.getInt("Air")),
+					JadeAddons.seconds(maxair)));
 		}
 	}
 

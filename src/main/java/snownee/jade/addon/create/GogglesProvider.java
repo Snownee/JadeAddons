@@ -86,7 +86,8 @@ public class GogglesProvider implements IBlockComponentProvider {
 				&& !(te instanceof SpoutBlockEntity)
 				&& !(te instanceof ItemDrainBlockEntity)
 				&& !(te instanceof BasinBlockEntity)
-				&& (!(te instanceof FluidTankBlockEntity tank) || (tank.getControllerBE() == null) || tank.getControllerBE().boiler.isActive());
+				&& (
+				!(te instanceof FluidTankBlockEntity tank) || (tank.getControllerBE() == null) || tank.getControllerBE().boiler.isActive());
 		/* on */
 		boolean hasHoveringInformation = te instanceof IHaveHoveringInformation;
 
@@ -101,13 +102,15 @@ public class GogglesProvider implements IBlockComponentProvider {
 		}
 
 		if (hasHoveringInformation) {
-			if (!tooltip.isEmpty())
+			if (!tooltip.isEmpty()) {
 				tooltip.add(Components.immutableEmpty());
+			}
 			IHaveHoveringInformation hte = (IHaveHoveringInformation) te;
 			hoverAddedInformation = hte.addToTooltip(tooltip, accessor.showDetails());
 
-			if (goggleAddedInformation && !hoverAddedInformation)
+			if (goggleAddedInformation && !hoverAddedInformation) {
 				tooltip.remove(tooltip.size() - 1);
+			}
 		}
 
 		if (te instanceof IDisplayAssemblyExceptions) {
@@ -118,8 +121,9 @@ public class GogglesProvider implements IBlockComponentProvider {
 			}
 		}
 
-		if (!hasHoveringInformation)
+		if (!hasHoveringInformation) {
 			hasHoveringInformation = hoverAddedInformation = TrainRelocator.addToTooltip(tooltip, accessor.showDetails());
+		}
 
 		// break early if goggle or hover returned false when present
 		if ((hasGoggleInformation && !goggleAddedInformation) && (hasHoveringInformation && !hoverAddedInformation)) {
@@ -158,8 +162,9 @@ public class GogglesProvider implements IBlockComponentProvider {
 			if (!pistonFound) {
 				return;
 			}
-			if (!tooltip.isEmpty())
+			if (!tooltip.isEmpty()) {
 				tooltip.add(Components.immutableEmpty());
+			}
 
 			tooltip.add(Lang.translateDirect("gui.goggles.pole_length").append(Components.literal(" " + poles)));
 		}

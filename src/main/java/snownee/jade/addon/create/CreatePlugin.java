@@ -146,7 +146,8 @@ public class CreatePlugin implements IWailaPlugin {
 		if (originalAccessor instanceof EntityAccessor) {
 			return accessor;
 		}
-		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.blockEntity().getBlockPos()),
+		BlockHitResult trackHit = new BlockHitResult(
+				Vec3.atCenterOf(result.blockEntity().getBlockPos()),
 				Direction.UP,
 				result.blockEntity().getBlockPos(),
 				false);

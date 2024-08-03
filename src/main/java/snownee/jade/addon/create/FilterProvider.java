@@ -54,14 +54,17 @@ public enum FilterProvider implements IBlockComponentProvider {
 				boolean respectNBT = filter.getOrCreateTag().getBoolean("RespectNBT");
 				var component = blacklist ? Lang.translateDirect("gui.filter.deny_list") : Lang.translateDirect("gui.filter.allow_list");
 				component.append("  -  ");
-				component.append(respectNBT ? Lang.translateDirect("gui.filter.respect_data") : Lang.translateDirect("gui.filter.ignore_data"));
+				component.append(respectNBT ?
+						Lang.translateDirect("gui.filter.respect_data") :
+						Lang.translateDirect("gui.filter.ignore_data"));
 				tooltip2.add(new ScaledTextElement(component, 0.5F));
 				ItemStackHandler filterItems = FilterItem.getFilterItems(filter);
 				int count = 0;
 				for (int i = 0; i < filterItems.getSlots(); i++) {
 					ItemStack filterStack = filterItems.getStackInSlot(i);
-					if (filterStack.isEmpty())
+					if (filterStack.isEmpty()) {
 						continue;
+					}
 					IElement element = elements.item(filterStack, 0.8F);
 					if (count % 6 == 0) {
 						tooltip2.add(element);
@@ -72,7 +75,11 @@ public enum FilterProvider implements IBlockComponentProvider {
 				}
 			} else if ("create:attribute_filter".equals(key)) {
 				WhitelistMode whitelistMode = WhitelistMode.values()[filter.getOrCreateTag().getInt("WhitelistMode")];
-				var component = whitelistMode == WhitelistMode.WHITELIST_CONJ ? Lang.translateDirect("gui.attribute_filter.allow_list_conjunctive") : whitelistMode == WhitelistMode.WHITELIST_DISJ ? Lang.translateDirect("gui.attribute_filter.allow_list_disjunctive") : Lang.translateDirect("gui.attribute_filter.deny_list");
+				var component = whitelistMode == WhitelistMode.WHITELIST_CONJ ?
+						Lang.translateDirect("gui.attribute_filter.allow_list_conjunctive") :
+						whitelistMode == WhitelistMode.WHITELIST_DISJ ?
+								Lang.translateDirect("gui.attribute_filter.allow_list_disjunctive") :
+								Lang.translateDirect("gui.attribute_filter.deny_list");
 				tooltip2.add(new ScaledTextElement(component, 0.5F));
 				int count = 0;
 				ListTag attributes = filter.getOrCreateTag().getList("MatchedAttributes", Tag.TAG_COMPOUND);
