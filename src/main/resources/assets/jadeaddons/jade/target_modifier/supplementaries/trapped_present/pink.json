@@ -1,0 +1,9 @@
+{
+	"type": "replace",
+	"target": {
+		"block": "supplementaries:trapped_pink_present"
+	},
+	"with": {
+		"block": "supplementaries:pink_present"
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"type": "replace",
+	"target": {
+		"block": "supplementaries:trapped_white_present"
+	},
+	"with": {
+		"block": "supplementaries:white_present"
+	}
+}

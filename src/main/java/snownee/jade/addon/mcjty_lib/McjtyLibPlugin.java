@@ -7,9 +7,7 @@ import snownee.jade.addon.JadeAddons;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 
-@WailaPlugin(McjtyLibPlugin.ID)
 public class McjtyLibPlugin implements IWailaPlugin {
 	public static final String ID = "mcjtylib";
 	public static final ResourceLocation GENERAL = new ResourceLocation(ID, JadeAddons.ID);

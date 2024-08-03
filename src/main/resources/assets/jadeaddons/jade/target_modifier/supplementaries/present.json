@@ -1,0 +1,7 @@
+{
+	"type": "remove_elements",
+	"target": {
+		"block": "#supplementaries:present"
+	},
+	"tag": "minecraft:item_storage"
+}

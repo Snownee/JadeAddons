@@ -4,9 +4,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 
-@WailaPlugin(EnderIOPlugin.ID)
 public class EnderIOPlugin implements IWailaPlugin {
 	public static final String ID = "enderio";
 

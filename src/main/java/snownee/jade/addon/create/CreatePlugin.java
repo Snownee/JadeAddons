@@ -32,6 +32,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import snownee.jade.addon.JadeAddonsBase;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
@@ -58,7 +59,6 @@ public class CreatePlugin implements IWailaPlugin {
 	public static final ResourceLocation GOGGLES = new ResourceLocation(ID, "goggles");
 	public static final ResourceLocation REQUIRES_GOGGLES = new ResourceLocation(ID, "goggles.requires_goggles");
 	public static final ResourceLocation GOGGLES_DETAILED = new ResourceLocation(ID, "goggles.detailed");
-	static IWailaClientRegistration client;
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
@@ -73,7 +73,6 @@ public class CreatePlugin implements IWailaPlugin {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerClient(IWailaClientRegistration registration) {
-		client = registration;
 		registration.addConfig(REQUIRES_GOGGLES, true);
 		registration.addConfig(GOGGLES_DETAILED, false);
 		registration.registerEntityComponent(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
@@ -111,15 +110,17 @@ public class CreatePlugin implements IWailaPlugin {
 			Contraption contraption = contraptionEntity.getContraption();
 			PredicateTraceResult predicateResult = RaycastHelper.rayTraceUntil(localOrigin, localTarget, p -> {
 				StructureBlockInfo blockInfo = contraption.getBlocks().get(p);
-				if (blockInfo == null)
+				if (blockInfo == null) {
 					return false;
+				}
 				BlockState state = blockInfo.state();
 				VoxelShape raytraceShape = state.getShape(Minecraft.getInstance().level, BlockPos.ZERO);
-				if (raytraceShape.isEmpty())
+				if (raytraceShape.isEmpty()) {
 					return false;
+				}
 				BlockHitResult rayTrace = raytraceShape.clip(localOrigin, localTarget, p);
 				if (IWailaConfig.get().getPlugin().get(CONTRAPTION_EXACT_BLOCK) && rayTrace != null && rayTrace.getType() != Type.MISS) {
-					BlockAccessor originalAccessor = client.blockAccessor().blockState(state).hit(rayTrace).build();
+					BlockAccessor originalAccessor = JadeAddonsBase.client.blockAccessor().blockState(state).hit(rayTrace).build();
 					Accessor<?> accessor = originalAccessor;
 					for (JadeRayTraceCallback callback : WailaClientRegistration.INSTANCE.rayTraceCallback.callbacks()) {
 						accessor = callback.onRayTrace(rayTrace, accessor, originalAccessor);
@@ -145,9 +146,12 @@ public class CreatePlugin implements IWailaPlugin {
 		if (originalAccessor instanceof EntityAccessor) {
 			return accessor;
 		}
-		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.blockEntity().getBlockPos()), Direction.UP, result.blockEntity().getBlockPos(), false);
+		BlockHitResult trackHit = new BlockHitResult(Vec3.atCenterOf(result.blockEntity().getBlockPos()),
+				Direction.UP,
+				result.blockEntity().getBlockPos(),
+				false);
 		/* off */
-		return client.blockAccessor()
+		return JadeAddonsBase.client.blockAccessor()
 				.blockState(result.blockEntity().getBlockState())
 				.blockEntity(result.blockEntity())
 				.hit(trackHit)

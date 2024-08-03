@@ -8,9 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 
-@WailaPlugin(DeepResonancePlugin.ID)
 public class DeepResonancePlugin implements IWailaPlugin {
 	public static final String ID = "deepresonance";
 	public static final ResourceLocation CRYSTAL = new ResourceLocation(ID, "crystal");

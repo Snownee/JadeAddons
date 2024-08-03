@@ -13,9 +13,7 @@ import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 
-@WailaPlugin(LootrPlugin.ID)
 public class LootrPlugin implements IWailaPlugin {
 	public static final String ID = "lootr";
 	public static final ResourceLocation INFO = new ResourceLocation(ID, "info");

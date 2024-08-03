@@ -16,22 +16,19 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.TagsUpdatedEvent.UpdateCause;
 import net.minecraftforge.fml.ModList;
+import snownee.jade.addon.JadeAddons;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
-import snownee.jade.api.WailaPlugin;
 import snownee.jade.api.config.IWailaConfig;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotTypePreset;
 
-@WailaPlugin(GeneralPlugin.ID)
 public class GeneralPlugin implements IWailaPlugin {
-	public static final String ID = "jadeaddons";
+	public static final String ID = JadeAddons.ID;
 	public static final ResourceLocation EQUIPMENT_REQUIREMENT = new ResourceLocation(ID, "equipment_requirement");
 	//	public static final ResourceLocation DETAILS_EQUIPMENT_REQUIREMENT = new ResourceLocation(ID, "details_equipment_requirement");
-	static IWailaClientRegistration client;
 	/* off */
 	public static BiPredicate<Player, TagKey<Item>> EQUIPMENT_CHECK_PREDICATE = (player, tag) -> player.getMainHandItem().is(tag)
 			|| player.getOffhandItem().is(tag)
@@ -44,24 +41,47 @@ public class GeneralPlugin implements IWailaPlugin {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void registerClient(IWailaClientRegistration registration) {
-		client = registration;
 		registration.addConfig(EQUIPMENT_REQUIREMENT, "", ResourceLocation::isValidResourceLocation);
 		//		registration.addConfig(DETAILS_EQUIPMENT_REQUIREMENT, "", ResourceLocation::isValidResourceLocation);
 		registration.addConfigListener(EQUIPMENT_REQUIREMENT, id -> refreshTag(id, $ -> requirementTag = $));
 		//		registration.addConfigListener(DETAILS_EQUIPMENT_REQUIREMENT, id -> refreshTag(id, $ -> requirementDetailsTag = $));
-		registration.addRayTraceCallback(10000, this::override);
+		registration.addRayTraceCallback(10000,
+				(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) -> {
+					if (accessor != null) {
+						Player player = accessor.getPlayer();
+						if (requirementTag != null && !EQUIPMENT_CHECK_PREDICATE.test(player, requirementTag)) {
+							return null;
+						}
+						//			if (requirementDetailsTag != null && accessor.showDetails() && !EQUIPMENT_CHECK_PREDICATE.test(player, requirementDetailsTag)) {
+						//				//TODO universal accessor builder
+						//				if (accessor instanceof BlockAccessor blockAccessor) {
+						//					return client.blockAccessor().from(blockAccessor).showDetails(false).build();
+						//				}
+						//				if (accessor instanceof EntityAccessor entityAccessor) {
+						//					return client.entityAccessor().from(entityAccessor).showDetails(false).build();
+						//				}
+						//			}
+					}
+					return accessor;
+				});
 
 		if (ModList.get().isLoaded("curios")) {
 			/* off */
 			EQUIPMENT_CHECK_PREDICATE = EQUIPMENT_CHECK_PREDICATE.or((player, tag) -> CuriosApi.getCuriosHelper().findCurios(player, SlotTypePreset.HEAD.getIdentifier())
 					.stream()
-					.filter(result -> !result.slotContext().cosmetic())
-					.anyMatch(result -> result.stack().is(tag))
-			);
+					.filter(result -> !result.slotContext().cosmetic()).anyMatch(result -> result.stack().is(tag)));
 			/* on */
 		}
 
-		MinecraftForge.EVENT_BUS.addListener(this::tagsUpdated);
+		TargetModifierLoader loader = new TargetModifierLoader();
+		MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) -> {
+			if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.CLIENT_PACKET_RECEIVED) {
+				refreshTags();
+				loader.reload();
+			}
+		});
+		registration.addRayTraceCallback(loader);
+		registration.addTooltipCollectedCallback(loader);
 	}
 
 	private void refreshTags() {
@@ -76,32 +96,6 @@ public class GeneralPlugin implements IWailaPlugin {
 		} else {
 			setter.accept(TagKey.create(Registries.ITEM, new ResourceLocation(s)));
 		}
-	}
-
-	private void tagsUpdated(TagsUpdatedEvent event) {
-		if (event.getUpdateCause() == UpdateCause.CLIENT_PACKET_RECEIVED) {
-			refreshTags();
-		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public Accessor<?> override(HitResult hitResult, @Nullable Accessor<?> accessor, @Nullable Accessor<?> originalAccessor) {
-		if (accessor != null) {
-			Player player = accessor.getPlayer();
-			if (requirementTag != null && !EQUIPMENT_CHECK_PREDICATE.test(player, requirementTag)) {
-				return null;
-			}
-			//			if (requirementDetailsTag != null && accessor.showDetails() && !EQUIPMENT_CHECK_PREDICATE.test(player, requirementDetailsTag)) {
-			//				//TODO universal accessor builder
-			//				if (accessor instanceof BlockAccessor blockAccessor) {
-			//					return client.blockAccessor().from(blockAccessor).showDetails(false).build();
-			//				}
-			//				if (accessor instanceof EntityAccessor entityAccessor) {
-			//					return client.entityAccessor().from(entityAccessor).showDetails(false).build();
-			//				}
-			//			}
-		}
-		return accessor;
 	}
 
 }

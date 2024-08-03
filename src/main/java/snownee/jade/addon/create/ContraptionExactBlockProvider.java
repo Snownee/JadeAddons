@@ -10,6 +10,7 @@ import com.google.common.cache.CacheBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import snownee.jade.addon.JadeAddonsBase;
 import snownee.jade.addon.core.ObjectNameProvider;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
@@ -28,7 +29,9 @@ import snownee.jade.impl.ui.TextElement;
 public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 	INSTANCE;
 
-	private final Cache<Entity, Accessor<?>> accessorCache = CacheBuilder.newBuilder().weakKeys().expireAfterAccess(100, TimeUnit.MILLISECONDS).build();
+	private final Cache<Entity, Accessor<?>> accessorCache = CacheBuilder.newBuilder().weakKeys().expireAfterAccess(
+			100,
+			TimeUnit.MILLISECONDS).build();
 
 	@Override
 	public @Nullable IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
@@ -36,7 +39,7 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 		if (exact == null) {
 			return null;
 		}
-		return CreatePlugin.client.getAccessorHandler(exact.getAccessorType()).getIcon(exact);
+		return JadeAddonsBase.client.getAccessorHandler(exact.getAccessorType()).getIcon(exact);
 	}
 
 	@Override
