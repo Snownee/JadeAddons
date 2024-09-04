@@ -4,16 +4,15 @@ import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import snownee.jade.addon.JadeAddons;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+import snownee.jade.mixin.accessor.BacktankBlockEntityAccessor;
 
 public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
@@ -34,13 +33,7 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
 		BacktankBlockEntity backtank = (BacktankBlockEntity) accessor.getBlockEntity();
 		data.putInt("Air", backtank.getAirLevel());
-		for (Tag tag : backtank.getEnchantmentTag()) {
-			ResourceLocation id = EnchantmentHelper.getEnchantmentId((CompoundTag) tag);
-			if ("create:capacity".equals(id.toString())) {
-				data.putInt("Capacity", EnchantmentHelper.getEnchantmentLevel((CompoundTag) tag));
-				break;
-			}
-		}
+		data.putInt("Capacity", ((BacktankBlockEntityAccessor)backtank).getCapacityEnchantLevel());
 	}
 
 	@Override
