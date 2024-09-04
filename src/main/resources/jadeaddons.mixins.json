@@ -1,13 +1,13 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "snownee.jade.mixin",
+	"package": "snownee.jade.addon.mixin",
 	"refmap": "jadeaddons.refmap.json",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
 	],
 	"mixins": [
-		"accessor.BacktankBlockEntityAccessor"
+		"create.BacktankBlockEntityAccess"
 	],
 	"injectors": {
 		"defaultRequire": 0

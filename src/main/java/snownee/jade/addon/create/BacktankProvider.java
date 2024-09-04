@@ -7,12 +7,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import snownee.jade.addon.JadeAddons;
+import snownee.jade.addon.mixin.create.BacktankBlockEntityAccess;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.mixin.accessor.BacktankBlockEntityAccessor;
 
 public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
 	INSTANCE;
@@ -33,7 +33,7 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
 		BacktankBlockEntity backtank = (BacktankBlockEntity) accessor.getBlockEntity();
 		data.putInt("Air", backtank.getAirLevel());
-		data.putInt("Capacity", ((BacktankBlockEntityAccessor)backtank).getCapacityEnchantLevel());
+		data.putInt("Capacity", ((BacktankBlockEntityAccess) backtank).getCapacityEnchantLevel());
 	}
 
 	@Override
