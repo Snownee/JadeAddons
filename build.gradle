@@ -45,6 +45,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            arg '-mixin.config=jadeaddons.mixins.json'
 
             mods {
                 jadeaddons {
@@ -63,6 +64,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            args '--nogui', '-mixin.config=jadeaddons.mixins.json'
 
             mods {
                 jadeaddons {
@@ -105,7 +107,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
 
     //https://www.curseforge.com/minecraft/mc-mods/create/files/all?page=1&pageSize=20
-    implementation fg.deobf("curse.maven:create-328085:4835191")
+    implementation fg.deobf("curse.maven:create-328085:5689514")
     //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
 
     implementation fg.deobf("curse.maven:deep-resonance-233398:4598264")
@@ -186,4 +188,12 @@ unifiedPublishing {
             }
         }
     }
+}
+
+mixin {
+    add sourceSets.main, 'jadeaddons.refmap.json'
+    config 'jadeaddons.mixins.json'
+
+    debug.verbose = true
+    debug.export = true
 }
