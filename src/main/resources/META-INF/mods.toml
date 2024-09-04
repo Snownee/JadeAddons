@@ -17,5 +17,12 @@ versionRange = "[11.5.1, )"
 ordering = "NONE"
 side = "BOTH"
 
+[[dependencies.jadeaddons]]
+modId = "create"
+mandatory = false
+versionRange = "[0.5.1.h, )"
+ordering = "NONE"
+side = "BOTH"
+
 [modproperties.jadeaddons]
 catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod
