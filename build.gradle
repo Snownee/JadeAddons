@@ -14,9 +14,9 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = project.minecraft_version + "-Forge-" + project.mod_version
+version = project.minecraft_version + "-NeoForge-" + project.mod_version
 group = project.maven_group
-var realVersion = project.mod_version + '+forge'
+var realVersion = project.mod_version + '+neoforge'
 
 repositories {
     mavenLocal()
