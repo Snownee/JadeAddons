@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[46,)"
+loaderVersion = "*"
 license = "ARR"
 
 [[mods]]
@@ -12,17 +12,8 @@ description = "Jade additional mod supports"
 
 [[dependencies.jadeaddons]]
 modId = "jade"
-mandatory = true
-versionRange = "[11.5.1, )"
-ordering = "NONE"
-side = "BOTH"
-
-[[dependencies.jadeaddons]]
-modId = "create"
-mandatory = false
-versionRange = "[0.5.1.h, )"
-ordering = "NONE"
-side = "BOTH"
+type = "required"
+versionRange = "[15.7.1, )"
 
 [modproperties.jadeaddons]
 catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod

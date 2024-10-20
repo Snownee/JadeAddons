@@ -35,10 +35,10 @@ import snownee.jade.addon.JadeAddonsBase;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
-import snownee.jade.api.ITooltip;
 import snownee.jade.api.callback.JadeRayTraceCallback;
 import snownee.jade.api.callback.JadeTooltipCollectedCallback;
 import snownee.jade.api.config.IWailaConfig;
+import snownee.jade.api.ui.IBoxElement;
 import snownee.jade.util.JsonConfig;
 
 public class TargetModifierLoader extends SimpleJsonResourceReloadListener implements JadeRayTraceCallback, JadeTooltipCollectedCallback {
@@ -67,17 +67,17 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 								.asList()
 								.stream()
 								.map(JsonElement::getAsString)
-								.map(ResourceLocation::new)
+								.map(ResourceLocation::parse)
 								.toList();
 					} else {
-						tags = List.of(new ResourceLocation(tagElement.getAsString()));
+						tags = List.of(ResourceLocation.parse(tagElement.getAsString()));
 					}
 					for (Object target : targets) {
 						tagsToRemove.putAll(target, tags);
 					}
 				} else if ("replace".equals(type)) {
 					JsonObject with = GsonHelper.getAsJsonObject(jsonObject, "with");
-					Block block = parseBlocks(with).get(0);
+					Block block = parseBlocks(with).getFirst();
 					for (Object target : targets) {
 						replacementBlocks.put(target, block);
 					}
@@ -110,11 +110,11 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 		if (entityId.startsWith("#")) {
 			List<? extends EntityType<?>> list = Streams.stream(BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(TagKey.create(
 					Registries.ENTITY_TYPE,
-					new ResourceLocation(entityId.substring(1))))).map(Holder::value).toList();
+					ResourceLocation.parse(entityId.substring(1))))).map(Holder::value).toList();
 			Preconditions.checkArgument(!list.isEmpty(), "No entity type found for tag: " + entityId);
 			return list;
 		} else {
-			List<? extends EntityType<?>> list = BuiltInRegistries.ENTITY_TYPE.getOptional(new ResourceLocation(entityId))
+			List<? extends EntityType<?>> list = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(entityId))
 					.map(List::of)
 					.orElse(List.of());
 			Preconditions.checkArgument(!list.isEmpty(), "No entity type found for id: " + entityId);
@@ -127,11 +127,11 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 		if (blockId.startsWith("#")) {
 			List<Block> blocks = Streams.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(TagKey.create(
 					Registries.BLOCK,
-					new ResourceLocation(blockId.substring(1))))).map(Holder::value).toList();
+					ResourceLocation.parse(blockId.substring(1))))).map(Holder::value).toList();
 			Preconditions.checkArgument(!blocks.isEmpty(), "No block found for tag: " + blockId);
 			return blocks;
 		} else {
-			List<Block> list = BuiltInRegistries.BLOCK.getOptional(new ResourceLocation(blockId)).map(List::of).orElse(List.of());
+			List<Block> list = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.parse(blockId)).map(List::of).orElse(List.of());
 			Preconditions.checkArgument(!list.isEmpty(), "No block found for id: " + blockId);
 			return list;
 		}
@@ -181,13 +181,13 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 	}
 
 	@Override
-	public void onTooltipCollected(ITooltip tooltip, Accessor<?> accessor) {
+	public void onTooltipCollected(IBoxElement rootElement, Accessor<?> accessor) {
 		Object identifier = getTargetIdentifier(accessor);
 		if (identifier == null) {
 			return;
 		}
 		for (ResourceLocation tag : tagsToRemove.get(identifier)) {
-			tooltip.remove(tag);
+			rootElement.getTooltip().remove(tag);
 		}
 	}
 

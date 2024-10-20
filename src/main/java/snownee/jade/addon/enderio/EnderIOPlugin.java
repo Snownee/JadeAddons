@@ -10,6 +10,6 @@ public class EnderIOPlugin implements IWailaPlugin {
 
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
-		registration.usePickedResult(BuiltInRegistries.BLOCK.get(new ResourceLocation(ID, "conduit")));
+		registration.usePickedResult(BuiltInRegistries.BLOCK.get(ResourceLocation.fromNamespaceAndPath(ID, "conduit")));
 	}
 }

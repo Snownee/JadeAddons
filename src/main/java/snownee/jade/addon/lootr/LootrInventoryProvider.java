@@ -1,18 +1,19 @@
 package snownee.jade.addon.lootr;
 
 import java.util.List;
-import java.util.UUID;
+
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import noobanidus.mods.lootr.api.blockentity.ILootBlockEntity;
-import noobanidus.mods.lootr.data.DataStorage;
-import noobanidus.mods.lootr.data.SpecialChestInventory;
-import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
-import snownee.jade.addon.universal.ItemStorageProvider;
+import noobanidus.mods.lootr.common.api.LootrAPI;
+import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
+import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import snownee.jade.addon.universal.ItemCollector;
+import snownee.jade.addon.universal.ItemIterator;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.view.ClientViewGroup;
 import snownee.jade.api.view.IClientExtensionProvider;
@@ -20,8 +21,7 @@ import snownee.jade.api.view.IServerExtensionProvider;
 import snownee.jade.api.view.ItemView;
 import snownee.jade.api.view.ViewGroup;
 
-public enum LootrInventoryProvider
-		implements IServerExtensionProvider<Object, ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
+public enum LootrInventoryProvider implements IServerExtensionProvider<ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
 	INSTANCE;
 
 	@Override
@@ -35,30 +35,18 @@ public enum LootrInventoryProvider
 	}
 
 	@Override
-	public List<ViewGroup<ItemStack>> getGroups(ServerPlayer player, ServerLevel level, Object target, boolean showDetails) {
-		if (target instanceof ILootBlockEntity tile) {
-			if (tile.getOpeners().contains(player.getUUID())) {
-				UUID id = tile.getTileId();
-				SpecialChestInventory inv = DataStorage.getInventory(
-						level,
-						id,
-						tile.getPosition(),
-						player,
-						(RandomizableContainerBlockEntity) tile,
-						tile::unpackLootTable);
-				if (inv != null) {
-					return List.of(ItemView.fromContainer(inv, 54, 0));
-				}
-			}
-		} else if (target instanceof LootrChestMinecartEntity cart) {
-			if (cart.getOpeners().contains(player.getUUID())) {
-				SpecialChestInventory inv = DataStorage.getInventory(level, cart, player, cart::addLoot);
-				if (inv != null) {
-					return List.of(ItemView.fromContainer(inv, 54, 0));
-				}
+	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
+		Object target = accessor.getTarget();
+		Player player = accessor.getPlayer();
+		if (target instanceof ILootrInfoProvider infoProvider && infoProvider.hasOpened(player)) {
+			ILootrInventory inventory = LootrAPI.getInventory(
+					infoProvider,
+					((ServerPlayer) accessor.getPlayer()),
+					DefaultLootFiller.getInstance());
+			if (inventory != null) {
+				return new ItemCollector<>(new ItemIterator.ContainerItemIterator($ -> inventory, 0)).update(accessor);
 			}
 		}
-		return ItemStorageProvider.INSTANCE.getGroups(player, level, target, showDetails);
+		return null;
 	}
-
 }

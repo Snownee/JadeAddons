@@ -2,26 +2,24 @@ package snownee.jade.addon.lootr;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import noobanidus.mods.lootr.block.LootrBarrelBlock;
-import noobanidus.mods.lootr.block.LootrChestBlock;
-import noobanidus.mods.lootr.block.LootrInventoryBlock;
-import noobanidus.mods.lootr.block.LootrShulkerBlock;
-import noobanidus.mods.lootr.block.LootrTrappedChestBlock;
-import noobanidus.mods.lootr.entity.LootrChestMinecartEntity;
+import noobanidus.mods.lootr.common.block.LootrBarrelBlock;
+import noobanidus.mods.lootr.common.block.LootrChestBlock;
+import noobanidus.mods.lootr.common.block.LootrInventoryBlock;
+import noobanidus.mods.lootr.common.block.LootrShulkerBlock;
+import noobanidus.mods.lootr.common.block.LootrTrappedChestBlock;
+import noobanidus.mods.lootr.common.entity.LootrChestMinecartEntity;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 
 public class LootrPlugin implements IWailaPlugin {
 	public static final String ID = "lootr";
-	public static final ResourceLocation INFO = new ResourceLocation(ID, "info");
-	public static final ResourceLocation INVENTORY = new ResourceLocation(ID, "inventory");
+	public static final ResourceLocation INFO = ResourceLocation.fromNamespaceAndPath(ID, "info");
+	public static final ResourceLocation INVENTORY = ResourceLocation.fromNamespaceAndPath(ID, "inventory");
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
-		registration.registerBlockDataProvider(LootrInfoProvider.INSTANCE, RandomizableContainerBlockEntity.class);
+		registration.registerBlockDataProvider(LootrBlockInfoProvider.INSTANCE, RandomizableContainerBlockEntity.class);
 		registration.registerEntityDataProvider(LootrEntityInfoProvider.INSTANCE, LootrChestMinecartEntity.class);
 
 		registration.registerItemStorage(LootrInventoryProvider.INSTANCE, RandomizableContainerBlockEntity.class);
@@ -29,13 +27,12 @@ public class LootrPlugin implements IWailaPlugin {
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
 	public void registerClient(IWailaClientRegistration registration) {
-		registration.registerBlockComponent(LootrInfoProvider.INSTANCE, LootrBarrelBlock.class);
-		registration.registerBlockComponent(LootrInfoProvider.INSTANCE, LootrChestBlock.class);
-		registration.registerBlockComponent(LootrInfoProvider.INSTANCE, LootrInventoryBlock.class);
-		registration.registerBlockComponent(LootrInfoProvider.INSTANCE, LootrShulkerBlock.class);
-		registration.registerBlockComponent(LootrInfoProvider.INSTANCE, LootrTrappedChestBlock.class);
+		registration.registerBlockComponent(LootrBlockInfoProvider.INSTANCE, LootrBarrelBlock.class);
+		registration.registerBlockComponent(LootrBlockInfoProvider.INSTANCE, LootrChestBlock.class);
+		registration.registerBlockComponent(LootrBlockInfoProvider.INSTANCE, LootrInventoryBlock.class);
+		registration.registerBlockComponent(LootrBlockInfoProvider.INSTANCE, LootrShulkerBlock.class);
+		registration.registerBlockComponent(LootrBlockInfoProvider.INSTANCE, LootrTrappedChestBlock.class);
 		registration.registerEntityComponent(LootrEntityInfoProvider.INSTANCE, LootrChestMinecartEntity.class);
 
 		registration.registerItemStorageClient(LootrInventoryProvider.INSTANCE);

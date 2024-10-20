@@ -1,76 +1,105 @@
-buildscript {
-    repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-    }
-}
-
 plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '1.0.21'
     id "me.shedaniel.unified-publishing" version "0.1.+"
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-//apply plugin: 'org.parchmentmc.librarian.forgegradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
-apply plugin: 'org.spongepowered.mixin'
+tasks.named('wrapper', Wrapper).configure {
+    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+    distributionType = Wrapper.DistributionType.BIN
+}
 
-archivesBaseName = project.archives_base_name
 version = project.minecraft_version + "-Forge-" + project.mod_version
 group = project.maven_group
 var realVersion = project.mod_version + '+forge'
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+repositories {
+    mavenLocal()
+    maven { url "https://api.modrinth.com/maven" }
+    flatDir { dir 'libs' }
+}
+
+base {
+    archivesName = project.archives_base_name
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
-minecraft {
-    mappings channel: 'official', version: minecraft_version
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+//    parchment {
+//        mappingsVersion = project.parchment_mappings_version
+//        minecraftVersion = project.parchment_minecraft_version
+//    }
+
+    // This line is optional. Access Transformers are automatically detected
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
+            client()
 
-            // Recommended logging data for a userdev environment
-            //property 'forge.logging.markers', ''
-
-            // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            arg '-mixin.config=jadeaddons.mixins.json'
-
-            mods {
-                jadeaddons {
-                    source sourceSets.main
-                }
-            }
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         server {
-            workingDirectory project.file('run')
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
 
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // gameDirectory = project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        // applies to all the run configs above
+        configureEach {
             // Recommended logging data for a userdev environment
-            //property 'forge.logging.markers', ''
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
 
             // Recommended logging level for the console
-            property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args '--nogui', '-mixin.config=jadeaddons.mixins.json'
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
 
-            mods {
-                jadeaddons {
-                    source sourceSets.main
-                }
-            }
+    mods {
+        // define mod <-> source bindings
+        // these are used to tell the game which sources are for which mod
+        // mostly optional in a single mod project
+        // but multi mod projects should define one per mod
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
@@ -78,91 +107,53 @@ minecraft {
 // Include resources generated by data generators.
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
-repositories {
-    maven {
-        url = "https://www.cursemaven.com"
-    }
-    maven { url "https://api.modrinth.com/maven" }
-    flatDir {
-        dir 'libs'
-    }
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+    implementation "maven.modrinth:jei:k9dWgahN"
+    implementation "maven.modrinth:jade:15.7.1+neoforge"
+    implementation "maven.modrinth:kiwi:15.2.1+neoforge"
+    //implementation "libs:Jade-1.19.1:forge-8.4.1"
+    implementation "maven.modrinth:curios-continuation:9.0.14+1.21.1"
 
-    implementation fg.deobf("curse.maven:jei-238222:4609866")
-    implementation fg.deobf("maven.modrinth:jade:11.9.4+forge")
-    implementation fg.deobf("curse.maven:kiwi-303657:4592974")
-    //implementation fg.deobf("libs:Jade-1.19.1:forge-8.4.1")
-    implementation fg.deobf("curse.maven:curios-309927:4583413")
+    //implementation "curse.maven:secret-rooms-59652:4098367"
 
-    //implementation fg.deobf("curse.maven:secret-rooms-59652:4098367")
-
-    //implementation fg.deobf("curse.maven:mantle-74924:3829975")
-    //implementation fg.deobf("curse.maven:tinkers-construct-74072:3829979")
+    //implementation "curse.maven:mantle-74924:3829975"
+    //implementation "curse.maven:tinkers-construct-74072:3829979"
 
     //https://www.curseforge.com/minecraft/mc-mods/create/files/all?page=1&pageSize=20
-    implementation fg.deobf("curse.maven:create-328085:5689514")
-    //implementation fg.deobf("curse.maven:flywheel-486392:3864518")
+//    implementation "curse.maven:create-328085:5689514"
+    //implementation "curse.maven:flywheel-486392:3864518"
 
-    implementation fg.deobf("curse.maven:deep-resonance-233398:4598264")
-    implementation fg.deobf("curse.maven:rftools-base-326041:4598236")
-    implementation fg.deobf("curse.maven:mcjtylib-233105:4598235")
+//    implementation "curse.maven:deep-resonance-233398:4598264"
+//    implementation "curse.maven:rftools-base-326041:4598236"
+//    implementation "curse.maven:mcjtylib-233105:4598235"
 
-    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+    implementation "maven.modrinth:the-one-probe:1.21_neo-12.0.4"
 
-    //implementation fg.deobf("curse.maven:thermal-expansion-69163:3837868")
-    //implementation fg.deobf("curse.maven:thermal-foundation-222880:3837827")
-    //implementation fg.deobf("curse.maven:cofh-core-69162:3838025")
+    //implementation "curse.maven:thermal-expansion-69163:3837868"
+    //implementation "curse.maven:thermal-foundation-222880:3837827"
+    //implementation "curse.maven:cofh-core-69162:3838025"
 
-    implementation fg.deobf("curse.maven:lootr-361276:5420132")
+    implementation "maven.modrinth:lootr:qghgMj7F"
 
-    implementation fg.deobf("curse.maven:ender-io-64578:5549669")
-}
-
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : realVersion,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/mcmodsrepo"
-        }
-    }
+    implementation "maven.modrinth:enderio:7.0.8-alpha"
 }
 
 unifiedPublishing {
     project {
-        displayName = "[Forge $project.supported_version] $project.mod_version"
+        displayName = "[NeoForge $project.supported_version] $project.mod_version"
         version = realVersion // Optional, Inferred from project by default
         changelog = file("CHANGELOG.md").exists() ? file("CHANGELOG.md").text : "" // Optional, in markdown format
         releaseType = project.release_type // Optional, use "release", "beta" or "alpha"
-        gameVersions = ["1.20", "1.20.1"]
-        gameLoaders = ["forge", "neoforge"]
+        gameVersions = [project.minecraft_version]
+        gameLoaders = ["neoforge"]
 
         mainPublication tasks.jar // Declares the publicated jar
 
@@ -190,10 +181,14 @@ unifiedPublishing {
     }
 }
 
-mixin {
-    add sourceSets.main, 'jadeaddons.refmap.json'
-    config 'jadeaddons.mixins.json'
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
 
-    debug.verbose = true
-    debug.export = true
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
 }

@@ -7,12 +7,9 @@ import java.util.function.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import snownee.jade.addon.create.CreatePlugin;
-import snownee.jade.addon.deep_resonance.DeepResonancePlugin;
 import snownee.jade.addon.enderio.EnderIOPlugin;
 import snownee.jade.addon.general.GeneralPlugin;
 import snownee.jade.addon.lootr.LootrPlugin;
-import snownee.jade.addon.mcjty_lib.McjtyLibPlugin;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -27,10 +24,10 @@ public class JadeAddonsBase implements IWailaPlugin {
 
 	static {
 		PLUGIN_LOADERS.put(JadeAddons.ID, () -> GeneralPlugin::new);
-		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
+//		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
 		PLUGIN_LOADERS.put("lootr", () -> LootrPlugin::new);
-		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);
-		PLUGIN_LOADERS.put("deepresonance", () -> DeepResonancePlugin::new);
+//		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);
+//		PLUGIN_LOADERS.put("deepresonance", () -> DeepResonancePlugin::new);
 		PLUGIN_LOADERS.put("enderio", () -> EnderIOPlugin::new);
 	}
 
