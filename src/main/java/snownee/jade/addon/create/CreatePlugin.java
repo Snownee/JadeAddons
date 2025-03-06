@@ -9,6 +9,8 @@ import com.simibubi.create.content.equipment.armor.BacktankBlock;
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 import com.simibubi.create.content.equipment.blueprint.BlueprintEntity;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
+import com.simibubi.create.content.logistics.box.PackageEntity;
+import com.simibubi.create.content.logistics.tableCloth.TableClothBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 import com.simibubi.create.content.trains.track.TrackBlockOutline;
@@ -43,9 +45,10 @@ import snownee.jade.api.callback.JadeRayTraceCallback;
 import snownee.jade.api.config.IWailaConfig;
 import snownee.jade.impl.WailaClientRegistration;
 import snownee.jade.overlay.RayTracing;
+import snownee.jade.util.CommonProxy;
 
 public class CreatePlugin implements IWailaPlugin {
-	public static final String ID = "create";
+	public static final String ID = "jadeaddons.create";
 	public static final ResourceLocation CRAFTING_BLUEPRINT = new ResourceLocation(ID, "crafting_blueprint");
 	public static final ResourceLocation PLACARD = new ResourceLocation(ID, "placard");
 	public static final ResourceLocation BLAZE_BURNER = new ResourceLocation(ID, "blaze_burner");
@@ -57,14 +60,21 @@ public class CreatePlugin implements IWailaPlugin {
 	public static final ResourceLocation GOGGLES = new ResourceLocation(ID, "goggles");
 	public static final ResourceLocation REQUIRES_GOGGLES = new ResourceLocation(ID, "goggles.requires_goggles");
 	public static final ResourceLocation GOGGLES_DETAILED = new ResourceLocation(ID, "goggles.detailed");
+	public static final ResourceLocation PACKAGE = new ResourceLocation(ID, "package");
+	public static final ResourceLocation TABLE_CLOTH = new ResourceLocation(ID, "table_cloth");
 
 	@Override
 	public void register(IWailaCommonRegistration registration) {
 		registration.registerBlockDataProvider(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlockEntity.class);
 		registration.registerBlockDataProvider(BacktankProvider.INSTANCE, BacktankBlockEntity.class);
 		registration.registerItemStorage(ContraptionItemStorageProvider.INSTANCE, AbstractContraptionEntity.class);
+		registration.registerItemStorage(PackageProvider.INSTANCE, PackageEntity.class);
+		registration.registerItemStorage(TableClothProvider.INSTANCE, TableClothBlockEntity.class);
 		registration.registerFluidStorage(ContraptionFluidStorageProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerFluidStorage(HideBoilerHandlerProvider.INSTANCE, FluidTankBlockEntity.class);
+		if (CommonProxy.isPhysicallyClient()) {
+			registration.registerItemStorage(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
+		}
 	}
 
 	// See ContraptionHandlerClient
@@ -74,7 +84,6 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.addConfig(REQUIRES_GOGGLES, true);
 		registration.addConfig(GOGGLES_DETAILED, false);
 		registration.registerEntityComponent(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
-		registration.registerEntityIcon(CraftingBlueprintProvider.INSTANCE, BlueprintEntity.class);
 		registration.registerBlockComponent(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerBlockIcon(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerBlockComponent(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlock.class);
@@ -85,6 +94,9 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.registerBlockComponent(new GogglesProvider(), Block.class);
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);
+		registration.registerItemStorageClient(CraftingBlueprintProvider.INSTANCE);
+		registration.registerItemStorageClient(PackageProvider.INSTANCE);
+		registration.registerItemStorageClient(TableClothProvider.INSTANCE);
 		registration.registerFluidStorageClient(ContraptionFluidStorageProvider.INSTANCE);
 		registration.registerFluidStorageClient(HideBoilerHandlerProvider.INSTANCE);
 
@@ -106,29 +118,31 @@ public class CreatePlugin implements IWailaPlugin {
 			Vec3 localOrigin = contraptionEntity.toLocalVector(origin, 1);
 			Vec3 localTarget = contraptionEntity.toLocalVector(target, 1);
 			Contraption contraption = contraptionEntity.getContraption();
-			PredicateTraceResult predicateResult = RaycastHelper.rayTraceUntil(localOrigin, localTarget, p -> {
-				StructureBlockInfo blockInfo = contraption.getBlocks().get(p);
-				if (blockInfo == null) {
-					return false;
-				}
-				BlockState state = blockInfo.state();
-				VoxelShape raytraceShape = state.getShape(Minecraft.getInstance().level, BlockPos.ZERO);
-				if (raytraceShape.isEmpty()) {
-					return false;
-				}
-				BlockHitResult rayTrace = raytraceShape.clip(localOrigin, localTarget, p);
-				if (IWailaConfig.get().getPlugin().get(CONTRAPTION_EXACT_BLOCK) && rayTrace != null && rayTrace.getType() != Type.MISS) {
-					BlockAccessor originalAccessor = JadeAddonsBase.client.blockAccessor().blockState(state).hit(rayTrace).build();
-					Accessor<?> accessor = originalAccessor;
-					for (JadeRayTraceCallback callback : WailaClientRegistration.INSTANCE.rayTraceCallback.callbacks()) {
-						accessor = callback.onRayTrace(rayTrace, accessor, originalAccessor);
-					}
-					if (accessor != null) {
-						ContraptionExactBlockProvider.INSTANCE.setHit(contraptionEntity, accessor);
-					}
-				}
-				return rayTrace != null;
-			});
+			PredicateTraceResult predicateResult = RaycastHelper.rayTraceUntil(
+					localOrigin, localTarget, p -> {
+						StructureBlockInfo blockInfo = contraption.getBlocks().get(p);
+						if (blockInfo == null) {
+							return false;
+						}
+						BlockState state = blockInfo.state();
+						VoxelShape raytraceShape = state.getShape(Minecraft.getInstance().level, BlockPos.ZERO);
+						if (raytraceShape.isEmpty()) {
+							return false;
+						}
+						BlockHitResult rayTrace = raytraceShape.clip(localOrigin, localTarget, p);
+						if (IWailaConfig.get().getPlugin().get(CONTRAPTION_EXACT_BLOCK) && rayTrace != null &&
+								rayTrace.getType() != Type.MISS) {
+							BlockAccessor originalAccessor = JadeAddonsBase.client.blockAccessor().blockState(state).hit(rayTrace).build();
+							Accessor<?> accessor = originalAccessor;
+							for (JadeRayTraceCallback callback : WailaClientRegistration.INSTANCE.rayTraceCallback.callbacks()) {
+								accessor = callback.onRayTrace(rayTrace, accessor, originalAccessor);
+							}
+							if (accessor != null) {
+								ContraptionExactBlockProvider.INSTANCE.setHit(contraptionEntity, accessor);
+							}
+						}
+						return rayTrace != null;
+					});
 			return predicateResult != null && !predicateResult.missed();
 		});
 

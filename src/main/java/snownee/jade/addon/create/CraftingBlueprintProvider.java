@@ -1,61 +1,41 @@
 package snownee.jade.addon.create;
 
-import java.lang.reflect.Field;
+import java.util.List;
 
-import com.simibubi.create.content.equipment.blueprint.BlueprintOverlayRenderer;
+import com.simibubi.create.content.equipment.blueprint.BlueprintEntity;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import snownee.jade.addon.JadeAddons;
+import snownee.jade.addon.mixin.create.BlueprintOverlayRendererAccess;
+import snownee.jade.addon.universal.ItemStorageProvider;
+import snownee.jade.api.Accessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.IDisplayHelper;
-import snownee.jade.api.ui.IElement;
-import snownee.jade.api.ui.IElementHelper;
+import snownee.jade.api.view.ClientViewGroup;
+import snownee.jade.api.view.IClientExtensionProvider;
+import snownee.jade.api.view.IServerExtensionProvider;
+import snownee.jade.api.view.ItemView;
+import snownee.jade.api.view.ViewGroup;
 
-public enum CraftingBlueprintProvider implements IEntityComponentProvider {
+public enum CraftingBlueprintProvider implements IEntityComponentProvider, IServerExtensionProvider<BlueprintEntity, ItemStack>, IClientExtensionProvider<ItemStack, ItemView> {
 	INSTANCE;
 
-	public static Field RESULT;
-
-	static {
-		try {
-			RESULT = BlueprintOverlayRenderer.class.getDeclaredField("result");
-			RESULT.setAccessible(true);
-		} catch (Throwable e) {
-			JadeAddons.LOGGER.trace("Error accessing blueprint result field", e);
-			RESULT = null;
-		}
+	public static List<ItemStack> getResults() {
+		List<ItemStack> results = BlueprintOverlayRendererAccess.getResults();
+		return results == null ? List.of() : results;
 	}
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
-		ItemStack result = getResult();
-		if (!result.isEmpty()) {
-			tooltip.add(IDisplayHelper.get().stripColor(result.getHoverName()));
+		CompoundTag data = accessor.getServerData();
+		if (!data.contains("JadeItemStorageUid")) {
+			ItemStorageProvider.putData(accessor);
 		}
-	}
-
-	@Override
-	public IElement getIcon(EntityAccessor accessor, IPluginConfig config, IElement currentIcon) {
-		ItemStack result = getResult();
-		if (!result.isEmpty()) {
-			return IElementHelper.get().item(result);
-		}
-		return null;
-	}
-
-	public static ItemStack getResult() {
-		if (RESULT != null) {
-			try {
-				return (ItemStack) RESULT.get(null);
-			} catch (Throwable e) {
-				JadeAddons.LOGGER.trace("Error getting blueprint result", e);
-			}
-		}
-		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -63,4 +43,18 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider {
 		return CreatePlugin.CRAFTING_BLUEPRINT;
 	}
 
+	@Override
+	public boolean isRequired() {
+		return true;
+	}
+
+	@Override
+	public List<ClientViewGroup<ItemView>> getClientGroups(Accessor<?> accessor, List<ViewGroup<ItemStack>> groups) {
+		return ClientViewGroup.map(groups, ItemView::new, null);
+	}
+
+	@Override
+	public List<ViewGroup<ItemStack>> getGroups(ServerPlayer player, ServerLevel level, BlueprintEntity entity, boolean showDetails) {
+		return List.of(new ViewGroup<>(getResults()));
+	}
 }

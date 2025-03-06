@@ -5,8 +5,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 import com.simibubi.create.content.equipment.armor.BacktankBlockEntity;
 
-@Mixin(BacktankBlockEntity.class)
+@Mixin(value = BacktankBlockEntity.class, remap = false)
 public interface BacktankBlockEntityAccess {
-	@Accessor(value = "capacityEnchantLevel", remap = false)
+	@Accessor("capacityEnchantLevel")
 	int getCapacityEnchantLevel();
 }

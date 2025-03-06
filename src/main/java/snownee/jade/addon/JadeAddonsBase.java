@@ -13,6 +13,7 @@ import snownee.jade.addon.enderio.EnderIOPlugin;
 import snownee.jade.addon.general.GeneralPlugin;
 import snownee.jade.addon.lootr.LootrPlugin;
 import snownee.jade.addon.mcjty_lib.McjtyLibPlugin;
+import snownee.jade.addon.tconstruct.TConstructPlugin;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -21,21 +22,23 @@ import snownee.jade.util.CommonProxy;
 
 @WailaPlugin
 public class JadeAddonsBase implements IWailaPlugin {
-	public static final Map<String, Supplier<Supplier<IWailaPlugin>>> PLUGIN_LOADERS = Maps.newHashMap();
 	public static IWailaClientRegistration client;
 	private final List<IWailaPlugin> plugins = Lists.newArrayList();
 
-	static {
-		PLUGIN_LOADERS.put(JadeAddons.ID, () -> GeneralPlugin::new);
-		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
-		PLUGIN_LOADERS.put("lootr", () -> LootrPlugin::new);
-		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);
-		PLUGIN_LOADERS.put("deepresonance", () -> DeepResonancePlugin::new);
-		PLUGIN_LOADERS.put("enderio", () -> EnderIOPlugin::new);
-	}
-
 	public JadeAddonsBase() {
-		PLUGIN_LOADERS.forEach((modid, loader) -> {
+		Map<String, Supplier<Supplier<IWailaPlugin>>> loaders = Maps.newHashMap();
+
+		loaders.put(JadeAddons.ID, () -> GeneralPlugin::new);
+		loaders.put("create", () -> CreatePlugin::new);
+		loaders.put("lootr", () -> LootrPlugin::new);
+		loaders.put("mcjtylib", () -> McjtyLibPlugin::new);
+		loaders.put("deepresonance", () -> DeepResonancePlugin::new);
+		loaders.put("enderio", () -> EnderIOPlugin::new);
+		if (CommonProxy.isDevEnv()) {
+			loaders.put("tconstruct", () -> TConstructPlugin::new);
+		}
+
+		loaders.forEach((modid, loader) -> {
 			if (!CommonProxy.isModLoaded(modid)) {
 				return;
 			}

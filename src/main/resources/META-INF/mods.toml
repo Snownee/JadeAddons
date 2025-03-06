@@ -13,14 +13,14 @@ description = "Jade additional mod supports"
 [[dependencies.jadeaddons]]
 modId = "jade"
 mandatory = true
-versionRange = "[11.5.1, )"
+versionRange = "[11.13.1, )"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.jadeaddons]]
 modId = "create"
 mandatory = false
-versionRange = "[0.5.1.h, )"
+versionRange = "[6.0.2, )"
 ordering = "NONE"
 side = "BOTH"
 

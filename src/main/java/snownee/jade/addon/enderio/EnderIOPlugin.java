@@ -6,10 +6,10 @@ import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
 
 public class EnderIOPlugin implements IWailaPlugin {
-	public static final String ID = "enderio";
+	public static final String ID = "jadeaddons.enderio";
 
 	@Override
 	public void registerClient(IWailaClientRegistration registration) {
-		registration.usePickedResult(BuiltInRegistries.BLOCK.get(new ResourceLocation(ID, "conduit")));
+		registration.usePickedResult(BuiltInRegistries.BLOCK.get(new ResourceLocation("enderio", "conduit")));
 	}
 }

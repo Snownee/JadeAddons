@@ -38,7 +38,7 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<A
 			AbstractContraptionEntity entity,
 			boolean showDetails) {
 		Contraption contraption = entity.getContraption();
-		return List.of(JadeForgeUtils.fromItemHandler(contraption.getSharedInventory(), 54, 0));
+		return List.of(JadeForgeUtils.fromItemHandler(contraption.getStorage().getAllItems(), 54, 0));
 	}
 
 }

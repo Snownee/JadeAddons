@@ -10,7 +10,7 @@ import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 
 public class DeepResonancePlugin implements IWailaPlugin {
-	public static final String ID = "deepresonance";
+	public static final String ID = "jadeaddons.deepresonance";
 	public static final ResourceLocation CRYSTAL = new ResourceLocation(ID, "crystal");
 	public static final ResourceLocation GENERATOR_PART = new ResourceLocation(ID, "generator_part");
 

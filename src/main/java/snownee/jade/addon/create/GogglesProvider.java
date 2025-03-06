@@ -4,25 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.simibubi.create.api.equipment.goggles.IHaveGoggleInformation;
+import com.simibubi.create.api.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.contraptions.IDisplayAssemblyExceptions;
 import com.simibubi.create.content.contraptions.piston.MechanicalPistonBlock;
 import com.simibubi.create.content.contraptions.piston.PistonExtensionPoleBlock;
 import com.simibubi.create.content.equipment.goggles.GoggleOverlayRenderer;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
-import com.simibubi.create.content.equipment.goggles.IHaveGoggleInformation;
-import com.simibubi.create.content.equipment.goggles.IHaveHoveringInformation;
 import com.simibubi.create.content.fluids.drain.ItemDrainBlockEntity;
 import com.simibubi.create.content.fluids.spout.SpoutBlockEntity;
 import com.simibubi.create.content.fluids.tank.FluidTankBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.trains.entity.TrainRelocator;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.LiteralContents;
@@ -30,7 +30,6 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
@@ -45,12 +44,12 @@ import snownee.jade.api.ui.IElementHelper;
 // See GoggleOverlayRenderer
 public class GogglesProvider implements IBlockComponentProvider {
 
-	private static final ResourceLocation CREATE_OVERLAY_ID = new ResourceLocation(CreatePlugin.ID, "goggle_info");
+	private static final ResourceLocation CREATE_OVERLAY_ID = new ResourceLocation("create", "goggle_info");
 	private static final Set<String> REMOVE_KEYS = Set.of("create.tooltip.chute.contains", "create.tooltip.deployer.contains");
 
 	@SuppressWarnings("deprecation")
 	private static Block block(String id) {
-		return BuiltInRegistries.BLOCK.get(new ResourceLocation(CreatePlugin.ID, id));
+		return BuiltInRegistries.BLOCK.get(new ResourceLocation("create", id));
 	}
 
 	private final Block PISTON_EXTENSION_POLE = block("piston_extension_pole");
@@ -103,7 +102,7 @@ public class GogglesProvider implements IBlockComponentProvider {
 
 		if (hasHoveringInformation) {
 			if (!tooltip.isEmpty()) {
-				tooltip.add(Components.immutableEmpty());
+				tooltip.add(CommonComponents.EMPTY);
 			}
 			IHaveHoveringInformation hte = (IHaveHoveringInformation) te;
 			hoverAddedInformation = hte.addToTooltip(tooltip, accessor.showDetails());
@@ -150,7 +149,7 @@ public class GogglesProvider implements IBlockComponentProvider {
 		// check for piston poles if goggles are worn
 		BlockState state = world.getBlockState(pos);
 		if (wearingGoggles && state.is(PISTON_EXTENSION_POLE)) {
-			Direction[] directions = Iterate.directionsInAxis(state.getValue(DirectionalBlock.FACING).getAxis());
+			Direction[] directions = Iterate.directionsInAxis(state.getValue(PistonExtensionPoleBlock.FACING).getAxis());
 			int poles = 1;
 			boolean pistonFound = false;
 			for (Direction dir : directions) {
@@ -163,10 +162,10 @@ public class GogglesProvider implements IBlockComponentProvider {
 				return;
 			}
 			if (!tooltip.isEmpty()) {
-				tooltip.add(Components.immutableEmpty());
+				tooltip.add(CommonComponents.EMPTY);
 			}
 
-			tooltip.add(Lang.translateDirect("gui.goggles.pole_length").append(Components.literal(" " + poles)));
+			tooltip.add(CreateLang.translate("gui.goggles.pole_length").text(" " + poles).component());
 		}
 
 		tooltip.stream().map(c -> {
