@@ -9,8 +9,6 @@
 	"config.jade.plugin_jadeaddons.create.goggles": "Integrate Goggles",
 	"config.jade.plugin_jadeaddons.create.goggles.requires_goggles": "Requires Goggles",
 	"config.jade.plugin_jadeaddons.create.goggles.detailed": "Detailed-Only",
-	"config.jade.plugin_jadeaddons.tconstruct.casting_table": "Casting Table",
-	"config.jade.plugin_jadeaddons.tconstruct.drain": "Drain & Duct",
 	"config.jade.plugin_jadeaddons.mcjtylib.jadeaddons": "Enabled",
 	"config.jade.plugin_jadeaddons.deepresonance.crystal": "Crystal",
 	"config.jade.plugin_jadeaddons.deepresonance.generator_part": "Generator Part",

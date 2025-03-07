@@ -34,9 +34,7 @@ public class JadeAddonsBase implements IWailaPlugin {
 		loaders.put("mcjtylib", () -> McjtyLibPlugin::new);
 		loaders.put("deepresonance", () -> DeepResonancePlugin::new);
 		loaders.put("enderio", () -> EnderIOPlugin::new);
-		if (CommonProxy.isDevEnv()) {
-			loaders.put("tconstruct", () -> TConstructPlugin::new);
-		}
+		loaders.put("tconstruct", () -> TConstructPlugin::new);
 
 		loaders.forEach((modid, loader) -> {
 			if (!CommonProxy.isModLoaded(modid)) {

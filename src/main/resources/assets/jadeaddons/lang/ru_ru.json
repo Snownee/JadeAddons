@@ -9,8 +9,6 @@
 	"config.jade.plugin_jadeaddons.create.goggles": "Интегрировать очки",
 	"config.jade.plugin_jadeaddons.create.goggles.requires_goggles": "Требует очки",
 	"config.jade.plugin_jadeaddons.create.goggles.detailed": "Только подробный",
-	"config.jade.plugin_jadeaddons.tconstruct.casting_table": "Литейный стол",
-	"config.jade.plugin_jadeaddons.tconstruct.drain": "Дренаж и воздуховод",
 	"config.jade.plugin_jadeaddons.mcjtylib.jadeaddons": "Включено",
 	"config.jade.plugin_jadeaddons.deepresonance.crystal": "Кристалл",
 	"config.jade.plugin_jadeaddons.deepresonance.generator_part": "Часть генератора",
