@@ -1,9 +1,9 @@
 {
 	"type": "replace",
 	"target": {
-		"block": "supplementaries:trapped_light_blue_present"
+		"block": "supplementaries:trapped_present_light_blue"
 	},
 	"with": {
-		"block": "supplementaries:light_blue_present"
+		"block": "supplementaries:present_light_blue"
 	}
 }
