@@ -1,9 +1,9 @@
 {
 	"type": "replace",
 	"target": {
-		"block": "supplementaries:trapped_magenta_present"
+		"block": "supplementaries:trapped_present_magenta"
 	},
 	"with": {
-		"block": "supplementaries:magenta_present"
+		"block": "supplementaries:present_magenta"
 	}
 }
