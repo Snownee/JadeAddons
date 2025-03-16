@@ -55,5 +55,4 @@ public enum FilterProvider implements IBlockComponentProvider {
 		box.setPadding(ScreenDirection.DOWN, 3);
 		tooltip.add(box);
 	}
-
 }

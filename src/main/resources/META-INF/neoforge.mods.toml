@@ -17,3 +17,6 @@ versionRange = "[15.7.1, )"
 
 [modproperties.jadeaddons]
 catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod
+
+[[mixins]]
+config = "jadeaddons.mixins.json"
