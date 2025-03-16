@@ -16,7 +16,7 @@
 	"config.jade.plugin_mcjtylib.jadeaddons": "Включено",
 	"config.jade.plugin_deepresonance.crystal": "Кристалл",
 	"config.jade.plugin_deepresonance.generator_part": "Часть генератора",
-	"config.jade.plugin_lootr.info": "Информация",
+	"config.jade.plugin_jadeaddons.lootr.info": "Информация",
 	"jadeaddons.create.backtank_air": "Воздух: %s/%s",
 	"jadeaddons.mcjtylib.infused": "Наполненный: %s%%",
 	"jadeaddons.mcjtylib.ownedBy": "Принадлежит: %s",

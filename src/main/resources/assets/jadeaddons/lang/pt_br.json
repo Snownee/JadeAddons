@@ -11,7 +11,7 @@
 	"config.jade.plugin_mcjtylib.jadeaddons": "Habilitado",
 	"config.jade.plugin_deepresonance.crystal": "Crystal",
 	"config.jade.plugin_deepresonance.generator_part": "Generator Part",
-	"config.jade.plugin_lootr.info": "Information",
+	"config.jade.plugin_jadeaddons.lootr.info": "Information",
 	"jadeaddons.mcjtylib.infused": "Infundido: %s%%",
 	"jadeaddons.mcjtylib.ownedBy": "Dono: %s",
 	"jadeaddons.mcjtylib.ownedBy.withChannel": "Dono: %s (Canal %s)",

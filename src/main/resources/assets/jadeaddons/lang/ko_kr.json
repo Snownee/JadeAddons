@@ -16,7 +16,7 @@
 	"config.jade.plugin_mcjtylib.jadeaddons": "활성화됨",
 	"config.jade.plugin_deepresonance.crystal": "크리스탈",
 	"config.jade.plugin_deepresonance.generator_part": "발전기 부품",
-	"config.jade.plugin_lootr.info": "정보",
+	"config.jade.plugin_jadeaddons.lootr.info": "정보",
 	"jadeaddons.create.backtank_air": "공기: %s/%s",
 	"jadeaddons.mcjtylib.infused": "주입됨: %s%%",
 	"jadeaddons.mcjtylib.ownedBy": "소유자: %s",
