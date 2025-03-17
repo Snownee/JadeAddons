@@ -10,8 +10,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -47,7 +47,7 @@ public enum BlazeBurnerProvider implements IBlockComponentProvider, IServerDataP
 		if (isCreative) {
 			tooltip.append(IThemeHelper.get().info(Component.translatable("jade.infinity")));
 		} else {
-			tooltip.append(IThemeHelper.get().seconds(compound.getInt("burnTimeRemaining")));
+			tooltip.append(IThemeHelper.get().seconds(compound.getInt("burnTimeRemaining"), 20));
 		}
 	}
 

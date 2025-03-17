@@ -1,9 +1,9 @@
 {
 	"type": "replace",
 	"target": {
-		"block": "supplementaries:trapped_blue_present"
+		"block": "supplementaries:trapped_present_blue"
 	},
 	"with": {
-		"block": "supplementaries:blue_present"
+		"block": "supplementaries:present_blue"
 	}
 }

@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import snownee.jade.addon.create.CreatePlugin;
 import snownee.jade.addon.enderio.EnderIOPlugin;
 import snownee.jade.addon.general.GeneralPlugin;
 import snownee.jade.addon.lootr.LootrPlugin;
@@ -24,7 +25,7 @@ public class JadeAddonsBase implements IWailaPlugin {
 
 	static {
 		PLUGIN_LOADERS.put(JadeAddons.ID, () -> GeneralPlugin::new);
-//		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
+		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
 		PLUGIN_LOADERS.put("lootr", () -> LootrPlugin::new);
 //		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);
 //		PLUGIN_LOADERS.put("deepresonance", () -> DeepResonancePlugin::new);
