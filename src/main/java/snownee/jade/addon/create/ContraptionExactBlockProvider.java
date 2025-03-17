@@ -17,7 +17,7 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
-import snownee.jade.api.Identifiers;
+import snownee.jade.api.JadeIds;
 import snownee.jade.api.TooltipPosition;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.theme.IThemeHelper;
@@ -50,18 +50,18 @@ public enum ContraptionExactBlockProvider implements IEntityComponentProvider {
 		}
 		ITooltip dummy = IElementHelper.get().tooltip();
 		if (exact instanceof BlockAccessor blockAccessor) {
-			ObjectNameProvider.INSTANCE.appendTooltip(dummy, blockAccessor, config);
+			ObjectNameProvider.getBlock().appendTooltip(dummy, blockAccessor, config);
 		} else if (exact instanceof EntityAccessor entityAccessor) {
-			ObjectNameProvider.INSTANCE.appendTooltip(dummy, entityAccessor, config);
+			ObjectNameProvider.getEntity().appendTooltip(dummy, entityAccessor, config);
 		}
 		if (!dummy.isEmpty()) {
 			// this is shitty... improve it one day
-			tooltip.remove(Identifiers.CORE_OBJECT_NAME);
+			tooltip.remove(JadeIds.CORE_OBJECT_NAME);
 			tooltip.add(0, dummy.get(0, Align.LEFT).stream().map(e -> {
 				if (e instanceof TextElement text) {
 					e = IElementHelper.get().text(IThemeHelper.get().title(text.text.getString()).copy().withStyle(ChatFormatting.ITALIC));
 				}
-				return e.tag(Identifiers.CORE_OBJECT_NAME);
+				return e.tag(JadeIds.CORE_OBJECT_NAME);
 			}).toList());
 		}
 	}

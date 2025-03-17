@@ -2,22 +2,22 @@ package snownee.jade.addon.create;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.view.ClientViewGroup;
 import snownee.jade.api.view.IClientExtensionProvider;
 import snownee.jade.api.view.IServerExtensionProvider;
 import snownee.jade.api.view.ItemView;
+import snownee.jade.api.view.ItemViewUtils;
 import snownee.jade.api.view.ViewGroup;
-import snownee.jade.util.JadeForgeUtils;
 
-public enum ContraptionItemStorageProvider implements IServerExtensionProvider<AbstractContraptionEntity, ItemStack>,
+public enum ContraptionItemStorageProvider implements IServerExtensionProvider<ItemStack>,
 		IClientExtensionProvider<ItemStack, ItemView> {
 	INSTANCE;
 
@@ -32,13 +32,12 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<A
 	}
 
 	@Override
-	public List<ViewGroup<ItemStack>> getGroups(
-			ServerPlayer player,
-			ServerLevel level,
-			AbstractContraptionEntity entity,
-			boolean showDetails) {
+	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
+		if (!(accessor.getTarget() instanceof AbstractContraptionEntity entity)) {
+			return null;
+		}
 		Contraption contraption = entity.getContraption();
-		return List.of(JadeForgeUtils.fromItemHandler(contraption.getSharedInventory(), 54, 0));
+		var items = contraption.getStorage().getAllItems();
+		return ItemViewUtils.groupOf(items, accessor, ignored -> items);
 	}
-
 }

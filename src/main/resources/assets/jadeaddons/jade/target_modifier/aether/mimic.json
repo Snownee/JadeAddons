@@ -1,0 +1,9 @@
+{
+	"type": "replace",
+	"target": {
+		"block": "aether:chest_mimic"
+	},
+	"with": {
+		"block": "minecraft:chest"
+	}
+}

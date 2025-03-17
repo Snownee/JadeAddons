@@ -2,13 +2,13 @@ package snownee.jade.addon.create;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.Contraption;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import snownee.jade.addon.lootr.LootrPlugin;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.view.ClientViewGroup;
@@ -18,7 +18,7 @@ import snownee.jade.api.view.IServerExtensionProvider;
 import snownee.jade.api.view.ViewGroup;
 import snownee.jade.util.JadeForgeUtils;
 
-public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<AbstractContraptionEntity, CompoundTag>,
+public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<CompoundTag>,
 		IClientExtensionProvider<CompoundTag, FluidView> {
 	INSTANCE;
 
@@ -33,13 +33,11 @@ public enum ContraptionFluidStorageProvider implements IServerExtensionProvider<
 	}
 
 	@Override
-	public List<ViewGroup<CompoundTag>> getGroups(
-			ServerPlayer player,
-			ServerLevel level,
-			AbstractContraptionEntity entity,
-			boolean showDetails) {
+	public @Nullable List<ViewGroup<CompoundTag>> getGroups(Accessor<?> accessor) {
+		if (!(accessor.getTarget() instanceof AbstractContraptionEntity entity)) {
+			return null;
+		}
 		Contraption contraption = entity.getContraption();
-		return JadeForgeUtils.fromFluidHandler(contraption.getSharedFluidTanks());
+		return JadeForgeUtils.fromFluidHandler(contraption.getStorage().getFluids());
 	}
-
 }

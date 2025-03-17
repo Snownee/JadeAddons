@@ -1,7 +1,7 @@
 {
 	"type": "remove_elements",
 	"target": {
-		"block": "#supplementaries:presents"
+		"block": "#supplementaries:trapped_presents"
 	},
 	"tag": "minecraft:item_storage"
 }
