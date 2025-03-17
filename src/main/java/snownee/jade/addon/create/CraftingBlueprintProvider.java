@@ -2,8 +2,6 @@ package snownee.jade.addon.create;
 
 import java.util.List;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -13,6 +11,7 @@ import snownee.jade.api.Accessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
+import snownee.jade.api.JadeIds;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.view.ClientViewGroup;
 import snownee.jade.api.view.IClientExtensionProvider;
@@ -31,7 +30,7 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider, IServ
 	@Override
 	public void appendTooltip(ITooltip tooltip, EntityAccessor accessor, IPluginConfig config) {
 		CompoundTag data = accessor.getServerData();
-		if (!data.contains("JadeItemStorageUid")) {
+		if (!data.contains(JadeIds.UNIVERSAL_ITEM_STORAGE.toString())) {
 			ItemStorageProvider.putData(accessor);
 		}
 	}
@@ -52,7 +51,7 @@ public enum CraftingBlueprintProvider implements IEntityComponentProvider, IServ
 	}
 
 	@Override
-	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
+	public List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
 		return List.of(new ViewGroup<>(getResults()));
 	}
 }

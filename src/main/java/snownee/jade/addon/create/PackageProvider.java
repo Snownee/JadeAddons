@@ -1,6 +1,7 @@
 package snownee.jade.addon.create;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -32,10 +33,12 @@ public enum PackageProvider implements IServerExtensionProvider<ItemStack>, ICli
 
 	@Override
 	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
-		if (!(accessor.getTarget() instanceof PackageEntity entity)) {
-			return null;
-		}
-		var contents = PackageItem.getContents(entity.box);
-		return ItemViewUtils.groupOf(contents, accessor, (ignored) -> contents);
+		Function<Accessor<?>, Object> finder = accessor1 -> {
+			if (!(accessor1.getTarget() instanceof PackageEntity entity)) {
+				return null;
+			}
+			return PackageItem.getContents(entity.box);
+		};
+		return ItemViewUtils.groupOf(finder.apply(accessor), accessor, finder);
 	}
 }

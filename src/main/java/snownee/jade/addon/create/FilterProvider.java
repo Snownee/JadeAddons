@@ -16,8 +16,6 @@ import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.ui.BoxStyle;
 import snownee.jade.api.ui.IElementHelper;
-import snownee.jade.api.ui.ScreenDirection;
-import snownee.jade.impl.ui.SpecialTextElement;
 
 public enum FilterProvider implements IBlockComponentProvider {
 	INSTANCE;
@@ -29,10 +27,9 @@ public enum FilterProvider implements IBlockComponentProvider {
 
 	@Override
 	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		if (!accessor.showDetails() || !(accessor.getBlockEntity() instanceof SmartBlockEntity)) {
+		if (!accessor.showDetails() || !(accessor.getBlockEntity() instanceof SmartBlockEntity te)) {
 			return;
 		}
-		SmartBlockEntity te = (SmartBlockEntity) accessor.getBlockEntity();
 		FilteringBehaviour behaviour = te.getBehaviour(FilteringBehaviour.TYPE);
 		if (behaviour == null) {
 			return;
@@ -48,11 +45,9 @@ public enum FilterProvider implements IBlockComponentProvider {
 		IElementHelper elements = IElementHelper.get();
 		ITooltip tooltip2 = elements.tooltip();
 		for (Component component : components) {
-			tooltip2.add(new SpecialTextElement(component).scale(0.5F));
+			tooltip2.add(elements.text(component).scale(0.5F));
 		}
-		var box = elements.box(tooltip2, BoxStyle.GradientBorder.DEFAULT_VIEW_GROUP);
-		box.setPadding(ScreenDirection.UP, 2);
-		box.setPadding(ScreenDirection.DOWN, 3);
+		var box = elements.box(tooltip2, BoxStyle.getViewGroup());
 		tooltip.add(box);
 	}
 }

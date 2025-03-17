@@ -1,11 +1,11 @@
 package snownee.jade.addon.create;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.jetbrains.annotations.Nullable;
 
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.Contraption;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -33,11 +33,12 @@ public enum ContraptionItemStorageProvider implements IServerExtensionProvider<I
 
 	@Override
 	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
-		if (!(accessor.getTarget() instanceof AbstractContraptionEntity entity)) {
-			return null;
-		}
-		Contraption contraption = entity.getContraption();
-		var items = contraption.getStorage().getAllItems();
-		return ItemViewUtils.groupOf(items, accessor, ignored -> items);
+		Function<Accessor<?>, Object> finder = accessor1 -> {
+			if (!(accessor1.getTarget() instanceof AbstractContraptionEntity entity)) {
+				return null;
+			}
+			return entity.getContraption().getStorage().getAllItems();
+		};
+		return ItemViewUtils.groupOf(finder.apply(accessor), accessor, finder);
 	}
 }
