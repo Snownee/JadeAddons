@@ -1,17 +1,16 @@
-package snownee.jade.addon.lootr;
+package snownee.jadeaddons.lootr;
 
 import java.util.List;
 
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.DefaultLootFiller;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
-import noobanidus.mods.lootr.common.api.data.inventory.ILootrInventory;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.interfaces.inventory.ILootrInventory;
 import snownee.jade.addon.universal.ItemCollector;
 import snownee.jade.addon.universal.ItemIterator;
 import snownee.jade.api.Accessor;
@@ -25,7 +24,7 @@ public enum LootrInventoryProvider implements IServerExtensionProvider<ItemStack
 	INSTANCE;
 
 	@Override
-	public ResourceLocation getUid() {
+	public Identifier getUid() {
 		return LootrPlugin.INVENTORY;
 	}
 
@@ -38,11 +37,9 @@ public enum LootrInventoryProvider implements IServerExtensionProvider<ItemStack
 	public @Nullable List<ViewGroup<ItemStack>> getGroups(Accessor<?> accessor) {
 		Object target = accessor.getTarget();
 		Player player = accessor.getPlayer();
-		if (target instanceof ILootrInfoProvider infoProvider && infoProvider.hasOpened(player)) {
-			ILootrInventory inventory = LootrAPI.getInventory(
-					infoProvider,
-					((ServerPlayer) accessor.getPlayer()),
-					DefaultLootFiller.getInstance());
+		if (target instanceof ILootrContainerInstance container && player instanceof ServerPlayer serverPlayer
+				&& container.hasServerOpened(player)) {
+			ILootrInventory inventory = LootrAPI.getInventory(container, serverPlayer);
 			if (inventory != null) {
 				return new ItemCollector<>(new ItemIterator.ContainerItemIterator($ -> inventory, 0)).update(accessor);
 			}

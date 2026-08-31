@@ -1,4 +1,4 @@
-package snownee.jade.addon.lootr;
+package snownee.jadeaddons.lootr;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -7,9 +7,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import noobanidus.mods.lootr.common.api.LootrAPI;
-import noobanidus.mods.lootr.common.api.data.ILootrInfoProvider;
+import noobanidus.mods.lootr.common.api.data.ILootrContainerInstance;
+import noobanidus.mods.lootr.common.api.data.ILootrInventoryStore;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.StreamServerDataProvider;
@@ -19,17 +20,21 @@ public interface LootrInfoProvider<A extends Accessor<?>> extends StreamServerDa
 
 	@Override
 	default @Nullable LootrInfoProvider.Data streamData(A accessor) {
-		if (!(accessor.getTarget() instanceof ILootrInfoProvider infoProvider)) {
+		if (!(accessor.getTarget() instanceof ILootrContainerInstance container)) {
+			return null;
+		}
+		ILootrInventoryStore inventoryStore = LootrAPI.getData(container);
+		if (inventoryStore == null) {
 			return null;
 		}
 		int decayValue = 0;
-		if (!LootrAPI.isDecayed(infoProvider)) {
-			decayValue = LootrAPI.getRemainingDecayValue(infoProvider);
+		if (!inventoryStore.isDecayed()) {
+			decayValue = inventoryStore.remainingDecayTime();
 		}
-		boolean refreshed = LootrAPI.isRefreshed(infoProvider);
+		boolean refreshed = inventoryStore.isRefreshed();
 		int refreshValue = 0;
 		if (!refreshed) {
-			refreshValue = LootrAPI.getRemainingRefreshValue(infoProvider);
+			refreshValue = inventoryStore.remainingRefreshTime();
 		}
 		return new Data(decayValue, refreshed, refreshValue);
 	}
@@ -56,7 +61,7 @@ public interface LootrInfoProvider<A extends Accessor<?>> extends StreamServerDa
 	}
 
 	@Override
-	default ResourceLocation getUid() {
+	default Identifier getUid() {
 		return LootrPlugin.INFO;
 	}
 

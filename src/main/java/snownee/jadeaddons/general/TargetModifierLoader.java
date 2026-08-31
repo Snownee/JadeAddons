@@ -1,9 +1,9 @@
-package snownee.jade.addon.general;
+package snownee.jadeaddons.general;
 
 import java.util.List;
 import java.util.Map;
 
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
@@ -18,11 +18,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.FileToIdConverter;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.profiling.InactiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EntityType;
@@ -30,47 +32,46 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import snownee.jade.addon.JadeAddons;
-import snownee.jade.addon.JadeAddonsBase;
+import snownee.jadeaddons.JadeAddons;
+import snownee.jadeaddons.JadeAddonsBase;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.callback.JadeRayTraceCallback;
 import snownee.jade.api.callback.JadeTooltipCollectedCallback;
 import snownee.jade.api.config.IWailaConfig;
-import snownee.jade.api.ui.IBoxElement;
-import snownee.jade.util.JsonConfig;
+import snownee.jade.api.ui.BoxElement;
 
-public class TargetModifierLoader extends SimpleJsonResourceReloadListener implements JadeRayTraceCallback, JadeTooltipCollectedCallback {
-	protected final ListMultimap<Object, ResourceLocation> tagsToRemove = ArrayListMultimap.create();
+public class TargetModifierLoader extends SimpleJsonResourceReloadListener<JsonElement> implements JadeRayTraceCallback, JadeTooltipCollectedCallback {
+	protected final ListMultimap<Object, Identifier> tagsToRemove = ArrayListMultimap.create();
 	protected final Map<Object, Block> replacementBlocks = Maps.newHashMap();
 
 	public TargetModifierLoader() {
-		super(JsonConfig.GSON, "jade/target_modifier");
+		super(ExtraCodecs.JSON, FileToIdConverter.json("jade/target_modifier"));
 	}
 
 	@Override
-	protected void apply(Map<ResourceLocation, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
+	protected void apply(Map<Identifier, JsonElement> map, ResourceManager resourceManager, ProfilerFiller profilerFiller) {
 		tagsToRemove.clear();
 		replacementBlocks.clear();
-		for (Map.Entry<ResourceLocation, JsonElement> entry : map.entrySet()) {
-			ResourceLocation id = entry.getKey();
+		for (Map.Entry<Identifier, JsonElement> entry : map.entrySet()) {
+			Identifier id = entry.getKey();
 			try {
 				JsonObject jsonObject = entry.getValue().getAsJsonObject();
 				String type = GsonHelper.getAsString(jsonObject, "type");
 				List<?> targets = parseTargets(GsonHelper.getAsJsonObject(jsonObject, "target"));
 				if ("remove_elements".equals(type)) {
 					JsonElement tagElement = GsonHelper.getNonNull(jsonObject, "tag");
-					List<ResourceLocation> tags;
+					List<Identifier> tags;
 					if (tagElement.isJsonArray()) {
 						tags = tagElement.getAsJsonArray()
 								.asList()
 								.stream()
 								.map(JsonElement::getAsString)
-								.map(ResourceLocation::parse)
+								.map(Identifier::parse)
 								.toList();
 					} else {
-						tags = List.of(ResourceLocation.parse(tagElement.getAsString()));
+						tags = List.of(Identifier.parse(tagElement.getAsString()));
 					}
 					for (Object target : targets) {
 						tagsToRemove.putAll(target, tags);
@@ -85,7 +86,7 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 					throw new IllegalArgumentException("Unknown type: " + type);
 				}
 			} catch (Exception e) {
-				if (IWailaConfig.get().getGeneral().isDebug()) {
+				if (IWailaConfig.get().general().isDebug()) {
 					JadeAddons.LOGGER.error("Failed to load target modifier {}", id, e);
 				}
 			}
@@ -110,11 +111,11 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 		if (entityId.startsWith("#")) {
 			List<? extends EntityType<?>> list = Streams.stream(BuiltInRegistries.ENTITY_TYPE.getTagOrEmpty(TagKey.create(
 					Registries.ENTITY_TYPE,
-					ResourceLocation.parse(entityId.substring(1))))).map(Holder::value).toList();
+					Identifier.parse(entityId.substring(1))))).map(Holder::value).toList();
 			Preconditions.checkArgument(!list.isEmpty(), "No entity type found for tag: " + entityId);
 			return list;
 		} else {
-			List<? extends EntityType<?>> list = BuiltInRegistries.ENTITY_TYPE.getOptional(ResourceLocation.parse(entityId))
+			List<? extends EntityType<?>> list = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(entityId))
 					.map(List::of)
 					.orElse(List.of());
 			Preconditions.checkArgument(!list.isEmpty(), "No entity type found for id: " + entityId);
@@ -127,11 +128,11 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 		if (blockId.startsWith("#")) {
 			List<Block> blocks = Streams.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(TagKey.create(
 					Registries.BLOCK,
-					ResourceLocation.parse(blockId.substring(1))))).map(Holder::value).toList();
+					Identifier.parse(blockId.substring(1))))).map(Holder::value).toList();
 			Preconditions.checkArgument(!blocks.isEmpty(), "No block found for tag: " + blockId);
 			return blocks;
 		} else {
-			List<Block> list = BuiltInRegistries.BLOCK.getOptional(ResourceLocation.parse(blockId)).map(List::of).orElse(List.of());
+			List<Block> list = BuiltInRegistries.BLOCK.getOptional(Identifier.parse(blockId)).map(List::of).orElse(List.of());
 			Preconditions.checkArgument(!list.isEmpty(), "No block found for id: " + blockId);
 			return list;
 		}
@@ -139,7 +140,7 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 
 	public void reload() {
 		Minecraft mc = Minecraft.getInstance();
-		Map<ResourceLocation, JsonElement> map = prepare(mc.getResourceManager(), InactiveProfiler.INSTANCE);
+		Map<Identifier, JsonElement> map = prepare(mc.getResourceManager(), InactiveProfiler.INSTANCE);
 		apply(map, mc.getResourceManager(), InactiveProfiler.INSTANCE);
 	}
 
@@ -159,11 +160,11 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 		if (accessor == null || accessor.getPlayer().isCreative()) {
 			return accessor;
 		}
-		if (JadeAddonsBase.client.maybeLowVisionUser() || !IWailaConfig.get().getGeneral().getBuiltinCamouflage()) {
+		if (JadeAddonsBase.client().maybeLowVisionUser() || !IWailaConfig.get().general().getBuiltinCamouflage()) {
 			return accessor;
 		}
 		if (accessor instanceof BlockAccessor blockAccessor) {
-			return JadeAddonsBase.client.blockAccessor().from(blockAccessor).blockState(replacement.defaultBlockState()).build();
+			return JadeAddonsBase.client().blockAccessor().from(blockAccessor).blockState(replacement.defaultBlockState()).build();
 		}
 		if (accessor instanceof EntityAccessor) {
 			BlockHitResult blockHitResult = new BlockHitResult(
@@ -171,7 +172,7 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 					accessor.getPlayer().getDirection().getOpposite(),
 					BlockPos.containing(hitResult.getLocation()),
 					false);
-			return JadeAddonsBase.client.blockAccessor()
+			return JadeAddonsBase.client().blockAccessor()
 					.hit(blockHitResult)
 					.player(accessor.getPlayer())
 					.blockState(replacement.defaultBlockState())
@@ -181,12 +182,12 @@ public class TargetModifierLoader extends SimpleJsonResourceReloadListener imple
 	}
 
 	@Override
-	public void onTooltipCollected(IBoxElement rootElement, Accessor<?> accessor) {
+	public void onTooltipCollected(BoxElement rootElement, Accessor<?> accessor) {
 		Object identifier = getTargetIdentifier(accessor);
 		if (identifier == null) {
 			return;
 		}
-		for (ResourceLocation tag : tagsToRemove.get(identifier)) {
+		for (Identifier tag : tagsToRemove.get(identifier)) {
 			rootElement.getTooltip().remove(tag);
 		}
 	}

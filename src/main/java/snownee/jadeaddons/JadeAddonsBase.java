@@ -1,35 +1,35 @@
-package snownee.jade.addon;
+package snownee.jadeaddons;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Supplier;
+
+import org.jspecify.annotations.Nullable;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import snownee.jade.addon.create.CreatePlugin;
-import snownee.jade.addon.enderio.EnderIOPlugin;
-import snownee.jade.addon.general.GeneralPlugin;
-import snownee.jade.addon.lootr.LootrPlugin;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 import snownee.jade.util.CommonProxy;
+import snownee.jadeaddons.general.GeneralPlugin;
+import snownee.jadeaddons.lootr.LootrPlugin;
 
 @WailaPlugin
 public class JadeAddonsBase implements IWailaPlugin {
 	public static final Map<String, Supplier<Supplier<IWailaPlugin>>> PLUGIN_LOADERS = Maps.newHashMap();
-	public static IWailaClientRegistration client;
+	private static @Nullable IWailaClientRegistration client;
 	private final List<IWailaPlugin> plugins = Lists.newArrayList();
 
 	static {
 		PLUGIN_LOADERS.put(JadeAddons.ID, () -> GeneralPlugin::new);
-		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
+//		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
 		PLUGIN_LOADERS.put("lootr", () -> LootrPlugin::new);
 //		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);
 //		PLUGIN_LOADERS.put("deepresonance", () -> DeepResonancePlugin::new);
-		PLUGIN_LOADERS.put("enderio", () -> EnderIOPlugin::new);
 	}
 
 	public JadeAddonsBase() {
@@ -62,5 +62,9 @@ public class JadeAddonsBase implements IWailaPlugin {
 	public void registerClient(IWailaClientRegistration registration) {
 		client = registration;
 		plugins.forEach($ -> $.registerClient(registration));
+	}
+
+	public static IWailaClientRegistration client() {
+		return Objects.requireNonNull(client);
 	}
 }

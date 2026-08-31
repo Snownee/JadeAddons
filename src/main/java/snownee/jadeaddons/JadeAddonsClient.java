@@ -1,4 +1,4 @@
-package snownee.jade.addon;
+package snownee.jadeaddons;
 
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;

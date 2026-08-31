@@ -13,10 +13,7 @@ description = "Jade additional mod supports"
 [[dependencies.jadeaddons]]
 modId = "jade"
 type = "required"
-versionRange = "[15.10, )"
+versionRange = "[26.1.10, )"
 
 [modproperties.jadeaddons]
 catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod
-
-[[mixins]]
-config = "jadeaddons.mixins.json"

@@ -9,7 +9,7 @@ import com.simibubi.create.content.contraptions.Contraption;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import snownee.jade.addon.lootr.LootrPlugin;
+import snownee.jade.lootr.LootrPlugin;
 import snownee.jade.api.Accessor;
 import snownee.jade.api.view.ClientViewGroup;
 import snownee.jade.api.view.FluidView;
