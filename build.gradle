@@ -125,7 +125,7 @@ dependencies {
     //implementation "libs:Jade-1.19.1:forge-8.4.1"
     implementation "maven.modrinth:curios-continuation:9.0.15+1.21.1"
 
-    //implementation "curse.maven:secret-rooms-59652:4098367"
+    implementation "maven.modrinth:aCK6U7Zr:mrqNRPJ5"
 
     //implementation "curse.maven:mantle-74924:3829975"
     //implementation "curse.maven:tinkers-construct-74072:3829979"
