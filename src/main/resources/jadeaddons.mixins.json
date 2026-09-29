@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "snownee.jadeaddons.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "create.BacktankBlockEntityAccess"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

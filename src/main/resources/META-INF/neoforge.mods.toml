@@ -15,5 +15,8 @@ modId = "jade"
 type = "required"
 versionRange = "[26.1.10, )"
 
+[[mixins]]
+config = "jadeaddons.mixins.json"
+
 [modproperties.jadeaddons]
 catalogueItemIcon = "minecraft:spyglass" #Support for Catalogue mod

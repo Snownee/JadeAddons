@@ -15,6 +15,7 @@ import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 import snownee.jade.util.CommonProxy;
+import snownee.jadeaddons.create.CreatePlugin;
 import snownee.jadeaddons.general.GeneralPlugin;
 import snownee.jadeaddons.lootr.LootrPlugin;
 import snownee.jadeaddons.oritech.OritechPlugin;
@@ -27,7 +28,7 @@ public class JadeAddonsBase implements IWailaPlugin {
 
 	static {
 		PLUGIN_LOADERS.put(JadeAddons.ID, () -> GeneralPlugin::new);
-//		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
+		PLUGIN_LOADERS.put("create", () -> CreatePlugin::new);
 		PLUGIN_LOADERS.put("lootr", () -> LootrPlugin::new);
 		PLUGIN_LOADERS.put("oritech", () -> OritechPlugin::new);
 //		PLUGIN_LOADERS.put("mcjtylib", () -> McjtyLibPlugin::new);

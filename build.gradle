@@ -148,6 +148,8 @@ dependencies {
     implementation "maven.modrinth:oritech:2.0.0-exp6"
     implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:5.5.1"
     runtimeOnly "earth.terrarium.athena:athena-neoforge-26.1:4.7.3"
+
+    implementation "maven.modrinth:create-fly:26.1.2-6.0.9-4"
 }
 
 publishMods {

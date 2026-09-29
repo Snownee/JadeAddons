@@ -28,7 +28,7 @@ public class OritechPlugin implements IWailaPlugin {
 		registration.addRayTraceCallback((HitResult _, Accessor<?> accessor, Accessor<?> _) -> redirect(registration, accessor));
 	}
 
-	private static @Nullable Accessor<?> redirect(IWailaClientRegistration registration, @Nullable Accessor<?> accessor) {
+	private static Accessor<?> redirect(IWailaClientRegistration registration, Accessor<?> accessor) {
 		if (!(accessor instanceof BlockAccessor blockAccessor)) {
 			return accessor;
 		}
