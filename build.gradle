@@ -26,6 +26,8 @@ repositories {
     maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
     maven { url = "https://mvn.devos.one/snapshots" } // Registrate
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
+    maven { url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" } // GeckoLib
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" } // Athena
     flatDir { dir 'libs' }
 }
 
@@ -142,6 +144,10 @@ dependencies {
     implementation "maven.modrinth:lootr:1.23.38.120"
 
     implementation "maven.modrinth:enderio:VWTnFpS5"
+
+    implementation "maven.modrinth:oritech:2.0.0-exp6"
+    implementation "com.geckolib:geckolib-neoforge-${minecraft_version}:5.5.1"
+    runtimeOnly "earth.terrarium.athena:athena-neoforge-26.1:4.7.3"
 }
 
 publishMods {
