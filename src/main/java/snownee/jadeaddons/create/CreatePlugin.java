@@ -87,11 +87,11 @@ public class CreatePlugin implements IWailaPlugin {
 		registration.addConfig(GOGGLES_DETAILED, false);
 		registration.registerBlockComponent(PlacardProvider.INSTANCE, PlacardBlock.class);
 		registration.registerBlockIcon(PlacardProvider.INSTANCE, PlacardBlock.class);
-		registration.registerBlockComponent(BlazeBurnerProvider.INSTANCE, BlazeBurnerBlock.class);
+		registration.registerBlockComponent(BlazeBurnerProvider.Client.INSTANCE, BlazeBurnerBlock.class);
 		registration.registerEntityIcon(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerEntityComponent(ContraptionExactBlockProvider.INSTANCE, AbstractContraptionEntity.class);
 		registration.registerBlockComponent(FilterProvider.INSTANCE, Block.class);
-		registration.registerBlockComponent(BacktankProvider.INSTANCE, BacktankBlock.class);
+		registration.registerBlockComponent(BacktankProvider.Client.INSTANCE, BacktankBlock.class);
 		registration.registerBlockComponent(new GogglesProvider(), Block.class);
 
 		registration.registerItemStorageClient(ContraptionItemStorageProvider.INSTANCE);

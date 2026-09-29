@@ -14,20 +14,8 @@ import snownee.jade.api.config.IPluginConfig;
 import snownee.jade.api.theme.IThemeHelper;
 import snownee.jadeaddons.mixin.create.BacktankBlockEntityAccess;
 
-public enum BacktankProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+public enum BacktankProvider implements IServerDataProvider<BlockAccessor> {
 	INSTANCE;
-
-	@Override
-	public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
-		CompoundTag data = accessor.getServerData();
-		if (data.contains("Air")) {
-			int maxair = BacktankUtil.maxAir(data.getIntOr("Capacity", 0));
-			tooltip.add(Component.translatable(
-					"jadeaddons.create.backtank_air",
-					IThemeHelper.get().seconds(data.getIntOr("Air", 0), accessor.tickRate()),
-					IThemeHelper.get().seconds(maxair, accessor.tickRate())));
-		}
-	}
 
 	@Override
 	public void appendServerData(CompoundTag data, BlockAccessor accessor) {
@@ -41,6 +29,27 @@ public enum BacktankProvider implements IBlockComponentProvider, IServerDataProv
 	@Override
 	public Identifier getUid() {
 		return CreatePlugin.BACKTANK_CAPACITY;
+	}
+
+	public enum Client implements IBlockComponentProvider {
+		INSTANCE;
+
+		@Override
+		public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+			CompoundTag data = accessor.getServerData();
+			if (data.contains("Air")) {
+				int maxair = BacktankUtil.maxAir(data.getIntOr("Capacity", 0));
+				tooltip.add(Component.translatable(
+						"jadeaddons.create.backtank_air",
+						IThemeHelper.get().seconds(data.getIntOr("Air", 0), accessor.tickRate()),
+						IThemeHelper.get().seconds(maxair, accessor.tickRate())));
+			}
+		}
+
+		@Override
+		public Identifier getUid() {
+			return CreatePlugin.BACKTANK_CAPACITY;
+		}
 	}
 
 }
